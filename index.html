@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>X Browser</title>
+<title>X Browser TV</title>
 <style>
 :root{
 --primary-bg:#f0f2f5;--secondary-bg:#fff;--header-bg:#2c3e50;
@@ -30,17 +30,19 @@ body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;al
   gap:4px;
 }
 
+/* ===== TOP BAR ===== */
 .top-bar{background:var(--header-bg);color:#fff;text-align:center;padding:4px;font-size:14px;font-weight:bold}
 .address-container{background:#fff;padding:5px;border-bottom:1px solid var(--border-color);position:relative}
-.url-bar-input{width:calc(100% - 30px);padding:5px 8px;border:1px solid var(--border-color);border-radius:15px;font-size:12px}
+.url-bar-input{width:calc(100% - 30px);padding:5px 8px;border:1px solid var(--border-color);border-radius:15px;font-size:12}
 .add-bookmark{position:absolute;right:8px;top:7px;background:#2ecc71;color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:14px;cursor:pointer}
 .search-engine-list,.url-suggestions{display:none;position:absolute;top:38px;left:5px;width:calc(100% - 10px);background:#fff;border:1px solid var(--border-color);border-radius:5px;z-index:10;padding:3px;text-align:center}
 .search-engine-list span,.url-suggestions span{display:inline-block;background:#eee;padding:2px 6px;margin:2px;border-radius:10px;font-size:10px;cursor:pointer}
+
+/* ===== BROWSER CONTENT ===== */
 .browser-content{flex-grow:1;padding:8px;overflow-y:auto}
 .quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:12px 6px}
-.grid-item{position:relative;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#333;font-size:10px}
+.grid-item{position:relative;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#333;font-size:10px;text-align:center}
 .grid-item img{width:30px;height:30px;border-radius:6px;background:#fff;border:1px solid var(--border-color)}
-.phone.desktop .grid-item img{width:40px;height:40px}
 .grid-item span{width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
 .delete-btn{position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:1px solid #fff;border-radius:50%;width:16px;height:16px;font-size:12px;line-height:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .bottom-nav{background:var(--header-bg);display:flex;justify-content:space-around;padding:4px 0}
@@ -59,7 +61,7 @@ body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;al
   </span>
 </div>
 
-<div class="top-bar">X Browser</div>
+<div class="top-bar">X Browser TV</div>
 
 <div class="address-container">
 <input type="text" class="url-bar-input" placeholder="Type URL Or Search...">
@@ -79,22 +81,15 @@ body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;al
 </div>
 
 <div class="browser-content">
-<div class="quick-links-grid">
-<a href="https://facebook.com" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=facebook.com"><span>Facebook</span></a>
-<a href="https://youtube.com" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=youtube.com"><span>YouTube</span></a>
-<a href="https://wikipedia.org" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=wikipedia.org"><span>Wikipedia</span></a>
-<a href="https://chatgpt.com" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com"><span>ChatGPT</span></a>
-</div>
-
 <div class="bookmark-list">
-<h4>Bookmarks</h4>
+<h4>TV Channels / Bookmarks</h4>
 <div id="bookmarks" class="quick-links-grid"></div>
 </div>
 </div>
 
 <div class="bottom-nav">
 <a id="desktopToggle">🖥</a>
-<a id="goBtn"></a>
+<a id="goBtn">Go</a>
 <a>Exit</a>
 </div>
 </div>
@@ -109,8 +104,8 @@ const goBtn=document.getElementById('goBtn');
 const phone=document.querySelector('.phone');
 const deskBtn=document.getElementById('desktopToggle');
 
+// Desktop toggle
 if(localStorage.getItem("desktopMode")==="on"){phone.classList.add("desktop")}
-
 deskBtn.onclick=()=>{phone.classList.toggle("desktop");
 localStorage.setItem("desktopMode",phone.classList.contains("desktop")?"on":"off")};
 
@@ -126,72 +121,78 @@ function updateTime(){
 setInterval(updateTime,1000);
 updateTime();
 
-// ===== REAL DEVICE BATTERY =====
-if(navigator.getBattery){
-  navigator.getBattery().then(battery=>{
-    function updateBattery(){
-      const level = Math.round(battery.level * 100);
-      const charging = battery.charging;
-      const iconSpan = document.querySelector(".icons");
-      if(charging){
-        iconSpan.innerHTML = "📶 ⚡<span id='battery'>" + level + "%</span>";
-      } else {
-        iconSpan.innerHTML = "📶 🔋<span id='battery'>" + level + "%</span>";
+// ===== REAL DEVICE BATTERY WITH CLOUD FALLBACK =====
+function setupBattery(){
+  const iconSpan = document.querySelector(".icons");
+  if(navigator.getBattery){
+    navigator.getBattery().then(battery=>{
+      function updateBattery(){
+        const level = Math.round(battery.level*100);
+        const charging = battery.charging;
+        if(charging) iconSpan.innerHTML = "📶 ⚡<span id='battery'>"+level+"%</span>";
+        else iconSpan.innerHTML = "📶 🔋<span id='battery'>"+level+"%</span>";
       }
-    }
-    updateBattery();
-    battery.addEventListener("levelchange", updateBattery);
-    battery.addEventListener("chargingchange", updateBattery);
-  });
+      updateBattery();
+      battery.addEventListener("levelchange", updateBattery);
+      battery.addEventListener("chargingchange", updateBattery);
+    }).catch(()=>{iconSpan.innerHTML = "📶 ⚡<span id='battery'>100%</span>";});
+  } else iconSpan.innerHTML = "📶 ⚡<span id='battery'>100%</span>";
 }
+setupBattery();
 
-// ===== BOOKMARKS =====
+// ===== BOOKMARK / TV CHANNEL SYSTEM =====
 function loadBookmarks(){
   const saved=JSON.parse(localStorage.getItem('bookmarks')||'[]');
   bookmarkContainer.innerHTML='';
-  saved.forEach((url,i)=>{
+  saved.forEach((item,i)=>{
     const a=document.createElement('a');
-    a.className='grid-item';a.href=url;a.target='_blank';
-    const host=new URL(url).hostname.replace(/^www\./,'');
-    a.innerHTML=`<img src="https://www.google.com/s2/favicons?domain=${host}">
-    <span>${host}</span><button class="delete-btn" data-i="${i}">×</button>`;
+    a.className='grid-item';a.href=item.url;a.target='_blank';
+    const logo=item.logo?`<img src="${item.logo}">`:'';
+    a.innerHTML=`${logo}<span>${item.name || item.url}</span>
+    <button class="delete-btn" data-i="${i}">×</button>`;
     bookmarkContainer.appendChild(a);
   });
   document.querySelectorAll('.delete-btn').forEach(b=>{
     b.onclick=e=>{
-      e.preventDefault();e.stopPropagation();
+      e.preventDefault(); e.stopPropagation();
       let s=JSON.parse(localStorage.getItem('bookmarks')||'[]');
-      s.splice(b.dataset.i,1);localStorage.setItem('bookmarks',JSON.stringify(s));loadBookmarks();
+      s.splice(b.dataset.i,1);
+      localStorage.setItem('bookmarks',JSON.stringify(s));
+      loadBookmarks();
     }
   });
 }
-
-input.oninput=()=>{
-  const v=input.value.trim();
-  engineList.style.display='none';suffixList.style.display='none';goBtn.innerText='';
-  if(!v)return;
-  if(v.includes(' ')||/^[^.]+$/.test(v))engineList.style.display='block';
-  else if(/\.$/.test(v))suffixList.style.display='block';
-  else goBtn.innerText='Go';
-};
-
-goBtn.onclick=()=>handleInput();
-function handleInput(){
-  let q=input.value.trim();if(!q)return;
-  if(/\./.test(q)&&!q.includes(' ')){
-    if(!/^https?:\/\//.test(q))q='https://'+q;
-    location.href=q;
-  }else location.href='https://google.com/search?q='+encodeURIComponent(q);
-}
-
 bookmarkBtn.onclick=()=>{
-  let v=input.value.trim();if(!v.includes('.'))return alert("Valid URL দিন");
-  if(!/^https?:\/\//.test(v))v='https://'+v;
+  let url=input.value.trim();
+  if(!url) return alert("Valid URL দিন");
+  if(!/^https?:\/\//.test(url)) url='https://'+url;
+  let name = prompt("TV Channel Name (optional)");
+  let logo = prompt("Logo URL (optional)");
   let s=JSON.parse(localStorage.getItem('bookmarks')||'[]');
-  if(!s.includes(v)){s.push(v);localStorage.setItem('bookmarks',JSON.stringify(s));loadBookmarks();}
+  s.push({url,name,logo});
+  localStorage.setItem('bookmarks',JSON.stringify(s));
+  loadBookmarks();
 };
 
 loadBookmarks();
+
+// ===== URL / Search =====
+input.oninput=()=>{
+  const v=input.value.trim();
+  engineList.style.display='none'; suffixList.style.display='none'; goBtn.innerText='';
+  if(!v) return;
+  if(v.includes(' ')||/^[^.]+$/.test(v)) engineList.style.display='block';
+  else if(/\.$/.test(v)) suffixList.style.display='block';
+  else goBtn.innerText='Go';
+};
+goBtn.onclick=()=>handleInput();
+function handleInput(){
+  let q=input.value.trim(); if(!q) return;
+  if(/\./.test(q) && !q.includes(' ')){
+    if(!/^https?:\/\//.test(q)) q='https://'+q;
+    location.href=q;
+  } else location.href='https://google.com/search?q='+encodeURIComponent(q);
+}
 </script>
 </body>
 </html>
