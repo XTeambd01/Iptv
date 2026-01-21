@@ -1,355 +1,131 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="referrer" content="no-referrer">
-    <title>NexGenBD - Stream App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
-    <style>
-        /* --- অ্যাপ রিসেট --- */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { 
-            background-color: #0b0c10; 
-            color: #e2e8f0; 
-            font-family: sans-serif; 
-            overflow: hidden; /* পুরো পেজ লক */
-            touch-action: pan-y; 
-            margin: 0; padding: 0;
-        }
-
-        /* --- মেইন লেআউট --- */
-        .app-layout { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
-        
-        /* পিসি ভিউ */
-        @media (min-width: 1024px) {
-            .app-layout { flex-direction: row; }
-            .video-section { width: 70%; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; }
-            .list-section { width: 30%; height: 100vh; background: #121318; border-left: 1px solid #2d303e; display: flex; flex-direction: column; }
-            .video-wrapper { width: 100%; height: 100%; }
-        }
-
-        /* মোবাইল ভিউ (ফিক্সড) */
-        @media (max-width: 1023px) {
-            .app-layout { display: block; position: relative; }
-            .video-section { 
-                position: fixed; top: 0; left: 0; width: 100%; z-index: 50; background: #000; 
-            }
-            .video-wrapper { padding-top: 56.25%; position: relative; } /* 16:9 Ratio */
-            
-            .list-section { 
-                position: absolute; 
-                top: 56.25vw; /* প্লেয়ারের নিচ থেকে শুরু */
-                bottom: 0; 
-                left: 0; 
-                width: 100%; 
-                background: #121318; 
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-            }
-        }
-
-        #iptv-player { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
-
-        /* --- ট্যাব মেনু --- */
-        .tabs-header {
-            flex-shrink: 0;
-            background: #1a1c24;
-            border-bottom: 1px solid #2d303e;
-            padding: 10px 0;
-        }
-        .tabs-container {
-            display: flex;
-            overflow-x: auto;
-            padding: 0 12px;
-            gap: 8px;
-            scrollbar-width: none;
-        }
-        .tabs-container::-webkit-scrollbar { display: none; }
-        
-        .tab-btn {
-            white-space: nowrap;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #94a3b8;
-            background: #252830;
-            border: 1px solid #353842;
-        }
-        .active-tab { background: #3b82f6; color: white; border-color: #3b82f6; }
-
-        /* --- চ্যানেল গ্রিড (Strict 3 Columns) --- */
-        .grid-scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-            width: 100%;
-        }
-        .grid-container {
-            display: grid;
-            /* minmax(0, 1fr) ব্যবহার করা হয়েছে যাতে কন্টেন্ট বড় হলেও কলাম বড় না হয় */
-            grid-template-columns: repeat(3, minmax(0, 1fr)); 
-            gap: 10px;
-            width: 100%;
-        }
-        /* পিসিতে ৪ কলাম */
-        @media (min-width: 1200px) { .grid-container { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-
-        /* --- কার্ড ডিজাইন (ফিক্সড সাইজ) --- */
-        .channel-card {
-            background: #1e2029;
-            border-radius: 10px;
-            padding: 8px 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #2d303e;
-            position: relative;
-            /* হাইট ফিক্স করে দেওয়া হলো যাতে বড় লোগো কার্ডকে বড় না করে */
-            height: 100px; 
-            width: 100%;
-            overflow: hidden;
-        }
-        .channel-card:active { background: #2a2c33; transform: scale(0.98); }
-        .selected-card { border: 2px solid #3b82f6 !important; background: #1e2538; }
-
-        /* --- লোগো ডিজাইন (লকড সাইজ) --- */
-        .logo-wrapper {
-            width: 40px; /* ফিক্সড উইথ */
-            height: 40px; /* ফিক্সড হাইট */
-            background: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            padding: 4px;
-            overflow: hidden; /* ছবি বড় হলে কেটে যাবে */
-            flex-shrink: 0; /* চ্যাপ্টা হবে না */
-        }
-        .logo-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* রেশিও ঠিক রেখে ফিট হবে */
-        }
-
-        .ch-name { 
-            font-size: 11px; 
-            font-weight: 700; 
-            color: #e2e8f0; 
-            text-align: center; 
-            line-height: 1.2;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis; /* নাম বড় হলে ... দেখাবে */
-        }
-
-        /* ইনফো বার */
-        .info-bar { 
-            padding: 8px 12px; 
-            background: #121318; 
-            border-bottom: 1px solid #2d303e;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-shrink: 0;
-        }
-        .srv-btn { font-size: 9px; padding: 3px 8px; background: #334155; color: white; border-radius: 4px; font-weight: bold; margin-left: 4px; }
-        .srv-active { background: #ef4444; }
-
-        /* সার্চ বক্স */
-        .search-box { padding: 8px 12px; background: #121318; flex-shrink: 0; }
-        .search-input { width: 100%; background: #1a1c24; border: 1px solid #2d303e; border-radius: 8px; padding: 8px; color: white; font-size: 13px; outline: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Browser</title>
+<style>
+:root{
+--primary-bg:#f0f2f5;--secondary-bg:#fff;--header-bg:#2c3e50;
+--header-text:#fff;--text-color:#333;--border-color:#dcdcdc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;align-items:center;height:100vh}
+.phone{width:100%;max-width:240px;aspect-ratio:3/4;display:flex;flex-direction:column;background:var(--primary-bg);overflow:hidden}
+.phone.desktop{max-width:420px;aspect-ratio:16/9}
+.top-bar{background:var(--header-bg);color:#fff;text-align:center;padding:4px;font-size:14px;font-weight:bold}
+.address-container{background:#fff;padding:5px;border-bottom:1px solid var(--border-color);position:relative}
+.url-bar-input{width:calc(100% - 30px);padding:5px 8px;border:1px solid var(--border-color);border-radius:15px;font-size:12px}
+.add-bookmark{position:absolute;right:8px;top:7px;background:#2ecc71;color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:14px;cursor:pointer}
+.search-engine-list,.url-suggestions{display:none;position:absolute;top:38px;left:5px;width:calc(100% - 10px);background:#fff;border:1px solid var(--border-color);border-radius:5px;z-index:10;padding:3px;text-align:center}
+.search-engine-list span,.url-suggestions span{display:inline-block;background:#eee;padding:2px 6px;margin:2px;border-radius:10px;font-size:10px;cursor:pointer}
+.browser-content{flex-grow:1;padding:8px;overflow-y:auto}
+.quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:12px 6px}
+.grid-item{position:relative;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#333;font-size:10px}
+.grid-item img{width:30px;height:30px;border-radius:6px;background:#fff;border:1px solid var(--border-color)}
+.phone.desktop .grid-item img{width:40px;height:40px}
+.grid-item span{width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.delete-btn{position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:1px solid #fff;border-radius:50%;width:16px;height:16px;font-size:12px;line-height:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.bottom-nav{background:var(--header-bg);display:flex;justify-content:space-around;padding:4px 0}
+.bottom-nav a{color:#fff;font-size:16px;text-decoration:none;min-width:50px;text-align:center;cursor:pointer}
+</style>
 </head>
+
 <body>
+<div class="phone">
+<div class="top-bar">X Browser</div>
 
-    <div class="app-layout">
-        <div class="video-section">
-            <div class="video-wrapper">
-                <video id="iptv-player" class="video-js vjs-big-play-centered vjs-theme-city" controls preload="auto"></video>
-            </div>
-        </div>
+<div class="address-container">
+<input type="text" class="url-bar-input" placeholder="Type URL Or Search...">
+<button class="add-bookmark">+</button>
+<div class="search-engine-list">
+<span data-engine="google">Google</span>
+<span data-engine="bing">Bing</span>
+<span data-engine="yahoo">Yahoo</span>
+</div>
+<div class="url-suggestions">
+<span data-suffix=".com">.com</span>
+<span data-suffix=".bd">.bd</span>
+<span data-suffix=".net">.net</span>
+<span data-suffix=".org">.org</span>
+<span data-suffix=".xyz">.xyz</span>
+</div>
+</div>
 
-        <div class="list-section">
-            <div class="info-bar">
-                <span class="text-xs font-bold text-white truncate max-w-[60%]" id="playing-title">Select Channel</span>
-                <div id="server-options" class="flex"></div>
-            </div>
+<div class="browser-content">
+<div class="quick-links-grid">
+<a href="https://facebook.com" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=facebook.com"><span>Facebook</span></a>
+<a href="https://youtube.com" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=youtube.com"><span>YouTube</span></a>
+<a href="https://wikipedia.org" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=wikipedia.org"><span>Wikipedia</span></a>
+<a href="https://chatgpt.com" class="grid-item"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com"><span>ChatGPT</span></a>
+</div>
 
-            <div class="tabs-header">
-                <div class="tabs-container">
-                    <button class="tab-btn active-tab" onclick="filterData('all')">🔥 VIP</button>
-                    <button class="tab-btn" onclick="filterData('sports')">Sports</button>
-                    <button class="tab-btn" onclick="filterData('news')">News</button>
-                    <button class="tab-btn" onclick="filterData('indian')">Indian</button>
-                    <button class="tab-btn" onclick="filterData('kids')">Kids</button>
-                </div>
-            </div>
+<div class="bookmark-list">
+<h4>Bookmarks</h4>
+<div id="bookmarks" class="quick-links-grid"></div>
+</div>
+</div>
 
-            <div class="search-box">
-                <input type="text" id="search" placeholder="Search..." class="search-input">
-            </div>
+<div class="bottom-nav">
+<a id="desktopToggle">🖥</a>
+<a id="goBtn"></a>
+<a>Exit</a>
+</div>
+</div>
 
-            <div class="grid-scroll-area">
-                <div class="grid-container" id="channel-grid">
-                    <div class="text-slate-500 text-xs col-span-3 text-center mt-10">Loading...</div>
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+const input=document.querySelector('.url-bar-input');
+const engineList=document.querySelector('.search-engine-list');
+const suffixList=document.querySelector('.url-suggestions');
+const bookmarkBtn=document.querySelector('.add-bookmark');
+const bookmarkContainer=document.getElementById('bookmarks');
+const goBtn=document.getElementById('goBtn');
+const phone=document.querySelector('.phone');
+const deskBtn=document.getElementById('desktopToggle');
 
-    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-    <script>
-        const player = videojs('iptv-player', { fluid: false, liveui: true });
-        let allData = {};
-        
-        // আমি সব লোগো ম্যাপ মুছে দিয়েছি যাতে প্লেলিস্টের লোগোই লোড হয় এবং CSS সেটাকে সাইজ করে নেয়
-        // শুধুমাত্র কিছু জরুরি লোগো রাখা হলো
-        const logoMap = {
-            "GTV": "https://upload.wikimedia.org/wikipedia/en/2/20/GTVBangladeshLogo.png"
-        };
+if(localStorage.getItem("desktopMode")==="on"){phone.classList.add("desktop")}
 
-        const nameCorrection = {
-            "jumuna": "JAMUNA TV", "jamuna": "JAMUNA TV",
-            "somoy": "SOMOY TV", "somoy tv": "SOMOY TV",
-            "t sports": "T SPORTS", "tsports": "T SPORTS",
-            "g tv": "GTV", "gazi tv": "GTV",
-            "channel 24": "CHANNEL 24", "atn news": "ATN NEWS",
-            "star jalsha": "STAR JALSHA", "zee bangla": "ZEE BANGLA"
-        };
+deskBtn.onclick=()=>{phone.classList.toggle("desktop");
+localStorage.setItem("desktopMode",phone.classList.contains("desktop")?"on":"off")};
 
-        const vipList = ["T SPORTS", "GTV", "JAMUNA TV", "SOMOY TV", "EKATTOR TV", "INDEPENDENT TV", "CHANNEL 24", "STAR JALSHA"];
-
-        async function init() {
-            try {
-                const res = await fetch('fetch_m3u.php');
-                const text = await res.text();
-                parseM3U(text);
-            } catch (err) { console.error(err); }
-        }
-
-        function cleanName(name) {
-            let n = name.toLowerCase().replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF])/g, '')
-                        .replace(/hd|sd|live|tv|bd|\[.*?\]|\(.*?\)|-|\|/gi, '').trim();
-            for (let key in nameCorrection) if (n.includes(key)) return nameCorrection[key];
-            return n.toUpperCase();
-        }
-
-        function parseM3U(data) {
-            const lines = data.split('\n');
-            allData = {};
-
-            for (let i = 0; i < lines.length; i++) {
-                if (lines[i].startsWith('#EXTINF')) {
-                    const info = lines[i];
-                    const url = lines[i + 1]?.trim();
-                    if (!url || !url.startsWith('http')) continue;
-
-                    let rawName = info.split(',')[1]?.trim() || "Unknown";
-                    let finalName = cleanName(rawName);
-                    if (finalName.length < 2) continue;
-
-                    // লোগো হ্যান্ডলিং
-                    let logoMatch = info.match(/tvg-logo="([^"]+)"/);
-                    let playlistLogo = logoMatch ? logoMatch[1] : '';
-                    let mapLogo = logoMap[finalName];
-                    let finalLogo = mapLogo ? mapLogo : playlistLogo;
-                    if(!finalLogo) finalLogo = `https://via.placeholder.com/50?text=${finalName[0]}`;
-
-                    if (!allData[finalName]) {
-                        allData[finalName] = { name: finalName, logo: finalLogo, urls: [] };
-                    }
-                    if(!allData[finalName].urls.includes(url)) allData[finalName].urls.push(url);
-                }
-            }
-            filterData('all');
-        }
-
-        function getPriority(name) {
-            for (let i = 0; i < vipList.length; i++) {
-                if (name.includes(vipList[i])) return i;
-            }
-            return 999;
-        }
-
-        window.filterData = (cat) => {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if(btn.innerText.toLowerCase().includes(cat === 'all' ? 'vip' : cat)) btn.classList.add('active-tab');
-                else btn.classList.remove('active-tab');
-            });
-
-            const container = document.getElementById('channel-grid');
-            container.innerHTML = '';
-            
-            let channels = Object.values(allData);
-
-            if (cat === 'sports') channels = channels.filter(c => c.name.match(/SPORTS|CRICKET|FOOTBALL|GTV|BPL/));
-            else if (cat === 'news') channels = channels.filter(c => c.name.match(/NEWS|SOMOY|JAMUNA|EKATTOR|24|INDEPENDENT|BTV/));
-            else if (cat === 'indian') channels = channels.filter(c => c.name.match(/JALSHA|ZEE|COLORS|SONY|STAR/));
-            else if (cat === 'kids') channels = channels.filter(c => c.name.match(/CARTOON|NICK|DISNEY|KIDS/));
-
-            channels.sort((a, b) => {
-                let pA = getPriority(a.name);
-                let pB = getPriority(b.name);
-                if (pA !== pB) return pA - pB;
-                return a.name.localeCompare(b.name);
-            });
-
-            channels.forEach(ch => {
-                const div = document.createElement('div');
-                div.className = 'channel-card';
-                div.innerHTML = `
-                    <div class="logo-wrapper">
-                        <img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/50?text=${ch.name[0]}'">
-                    </div>
-                    <div class="ch-name">${ch.name}</div>
-                `;
-                div.onclick = () => playChannel(ch, div);
-                container.appendChild(div);
-            });
-        }
-
-        function playChannel(ch, el) {
-            document.getElementById('playing-title').innerText = ch.name;
-            const sDiv = document.getElementById('server-options');
-            sDiv.innerHTML = '';
-            
-            player.pause();
-            player.src({ type: 'application/x-mpegURL', src: ch.urls[0] });
-            player.ready(() => { player.play().catch(e => console.log(e)); });
-
-            ch.urls.forEach((url, i) => {
-                let btn = document.createElement('button');
-                btn.className = 'srv-btn ml-1';
-                btn.innerText = `S${i+1}`;
-                btn.onclick = () => {
-                    player.src({ type: 'application/x-mpegURL', src: url });
-                    player.play();
-                    document.querySelectorAll('.srv-btn').forEach(b => b.classList.remove('srv-active'));
-                    btn.classList.add('srv-active');
-                };
-                sDiv.appendChild(btn);
-                if(i===0) btn.classList.add('srv-active');
-            });
-
-            document.querySelectorAll('.channel-card').forEach(c => c.classList.remove('selected-card'));
-            el.classList.add('selected-card');
-        }
-
-        document.getElementById('search').oninput = (e) => {
-            let val = e.target.value.toUpperCase();
-            document.querySelectorAll('.channel-card').forEach(card => {
-                card.style.display = card.innerText.toUpperCase().includes(val) ? 'flex' : 'none';
-            });
-        };
-
-        init();
-    </script>
+function loadBookmarks(){
+const saved=JSON.parse(localStorage.getItem('bookmarks')||'[]');
+bookmarkContainer.innerHTML='';
+saved.forEach((url,i)=>{
+const a=document.createElement('a');
+a.className='grid-item';a.href=url;a.target='_blank';
+const host=new URL(url).hostname.replace(/^www\./,'');
+a.innerHTML=`<img src="https://www.google.com/s2/favicons?domain=${host}">
+<span>${host}</span><button class="delete-btn" data-i="${i}">×</button>`;
+bookmarkContainer.appendChild(a);
+});
+document.querySelectorAll('.delete-btn').forEach(b=>{
+b.onclick=e=>{
+e.preventDefault();e.stopPropagation();
+let s=JSON.parse(localStorage.getItem('bookmarks')||'[]');
+s.splice(b.dataset.i,1);localStorage.setItem('bookmarks',JSON.stringify(s));loadBookmarks();
+}});
+}
+input.oninput=()=>{
+const v=input.value.trim();
+engineList.style.display='none';suffixList.style.display='none';goBtn.innerText='';
+if(!v)return;
+if(v.includes(' ')||/^[^.]+$/.test(v))engineList.style.display='block';
+else if(/\.$/.test(v))suffixList.style.display='block';
+else goBtn.innerText='Go';
+};
+goBtn.onclick=()=>handleInput();
+function handleInput(){
+let q=input.value.trim();if(!q)return;
+if(/\./.test(q)&&!q.includes(' ')){
+if(!/^https?:\/\//.test(q))q='https://'+q;location.href=q;
+}else location.href='https://google.com/search?q='+encodeURIComponent(q);
+}
+bookmarkBtn.onclick=()=>{
+let v=input.value.trim();if(!v.includes('.'))return alert("Valid URL দিন");
+if(!/^https?:\/\//.test(v))v='https://'+v;
+let s=JSON.parse(localStorage.getItem('bookmarks')||'[]');
+if(!s.includes(v)){s.push(v);localStorage.setItem('bookmarks',JSON.stringify(s));loadBookmarks();}
+};
+loadBookmarks();
+</script>
 </body>
 </html>
