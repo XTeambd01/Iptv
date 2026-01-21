@@ -95,6 +95,7 @@ body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;al
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
 const input=document.querySelector('.url-bar-input');
 const engineList=document.querySelector('.search-engine-list');
 const suffixList=document.querySelector('.url-suggestions');
@@ -106,16 +107,16 @@ const deskBtn=document.getElementById('desktopToggle');
 
 // Desktop toggle
 if(localStorage.getItem("desktopMode")==="on"){phone.classList.add("desktop")}
-deskBtn.onclick=()=>{phone.classList.toggle("desktop");
-localStorage.setItem("desktopMode",phone.classList.contains("desktop")?"on":"off")};
+deskBtn.onclick=()=>{
+  phone.classList.toggle("desktop");
+  localStorage.setItem("desktopMode",phone.classList.contains("desktop")?"on":"off");
+};
 
 // ===== TIME =====
 function updateTime(){
   const d=new Date();
-  let h=d.getHours();
-  let m=d.getMinutes();
-  if(h<10) h="0"+h;
-  if(m<10) m="0"+m;
+  let h=d.getHours(); let m=d.getMinutes();
+  if(h<10) h="0"+h; if(m<10) m="0"+m;
   document.getElementById("time").innerText = h + ":" + m;
 }
 setInterval(updateTime,1000);
@@ -140,14 +141,21 @@ function setupBattery(){
 }
 setupBattery();
 
-// ===== BOOKMARK / TV CHANNEL SYSTEM =====
+// ===== PRELOAD TV CHANNELS =====
+const defaultChannels=[
+  {name:"T Sports", url:"https://is.gd/sanyxtsports2", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
+  {name:"T Sports2 HD", url:"https://is.gd/sanyxtsports", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
+  {name:"Willow", url:"https://is.gd/sanyxtsports1", logo:"https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png"}
+];
+
 function loadBookmarks(){
+  if(!localStorage.getItem('bookmarks')) localStorage.setItem('bookmarks',JSON.stringify(defaultChannels));
   const saved=JSON.parse(localStorage.getItem('bookmarks')||'[]');
   bookmarkContainer.innerHTML='';
   saved.forEach((item,i)=>{
     const a=document.createElement('a');
-    a.className='grid-item';a.href=item.url;a.target='_blank';
-    const logo=item.logo?`<img src="${item.logo}">`:'';
+    a.className='grid-item'; a.href=item.url; a.target='_blank';
+    const logo=item.logo?`<img src="${item.logo}" alt="${item.name}">`:'';
     a.innerHTML=`${logo}<span>${item.name || item.url}</span>
     <button class="delete-btn" data-i="${i}">×</button>`;
     bookmarkContainer.appendChild(a);
@@ -162,18 +170,6 @@ function loadBookmarks(){
     }
   });
 }
-bookmarkBtn.onclick=()=>{
-  let url=input.value.trim();
-  if(!url) return alert("Valid URL দিন");
-  if(!/^https?:\/\//.test(url)) url='https://'+url;
-  let name = prompt("TV Channel Name (optional)");
-  let logo = prompt("Logo URL (optional)");
-  let s=JSON.parse(localStorage.getItem('bookmarks')||'[]');
-  s.push({url,name,logo});
-  localStorage.setItem('bookmarks',JSON.stringify(s));
-  loadBookmarks();
-};
-
 loadBookmarks();
 
 // ===== URL / Search =====
@@ -193,6 +189,8 @@ function handleInput(){
     location.href=q;
   } else location.href='https://google.com/search?q='+encodeURIComponent(q);
 }
+
+});
 </script>
 </body>
 </html>
