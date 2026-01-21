@@ -81,10 +81,8 @@ body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;al
 </div>
 
 <div class="browser-content">
-<div class="bookmark-list">
-<h4>TV Channels / Bookmarks</h4>
-<div id="bookmarks" class="quick-links-grid"></div>
-</div>
+<h4>Quick Links / TV Channels</h4>
+<div id="quickLinks" class="quick-links-grid"></div>
 </div>
 
 <div class="bottom-nav">
@@ -100,10 +98,10 @@ const input=document.querySelector('.url-bar-input');
 const engineList=document.querySelector('.search-engine-list');
 const suffixList=document.querySelector('.url-suggestions');
 const bookmarkBtn=document.querySelector('.add-bookmark');
-const bookmarkContainer=document.getElementById('bookmarks');
 const goBtn=document.getElementById('goBtn');
 const phone=document.querySelector('.phone');
 const deskBtn=document.getElementById('desktopToggle');
+const quickLinksContainer=document.getElementById('quickLinks');
 
 // Desktop toggle
 if(localStorage.getItem("desktopMode")==="on"){phone.classList.add("desktop")}
@@ -141,36 +139,26 @@ function setupBattery(){
 }
 setupBattery();
 
-// ===== PRELOAD TV CHANNELS =====
-const defaultChannels=[
+// ===== QUICK LINKS TV CHANNELS =====
+const tvChannels=[
   {name:"T Sports", url:"https://is.gd/sanyxtsports2", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
-  {name:"T Sports2 HD", url:"https://is.gd/sanyxtsports", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
-  {name:"Willow", url:"https://is.gd/sanyxtsports1", logo:"https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png"}
+  {name:"T Sports2 HD", url:"https://is.gd/sanyxtsports", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo.mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
+  {name:"Willow", url:"https://is.gd/sanyxtsports1", logo:"https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png"},
+  {name:"Bein Sports1", url:"https://is.gd/sanyxtsports4", logo:"https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png"},
+  {name:"Sport Tv", url:"https://is.gd/sanyxtsports5", logo:"https://flagcdn.com/w40/sa.png"}
 ];
 
-function loadBookmarks(){
-  if(!localStorage.getItem('bookmarks')) localStorage.setItem('bookmarks',JSON.stringify(defaultChannels));
-  const saved=JSON.parse(localStorage.getItem('bookmarks')||'[]');
-  bookmarkContainer.innerHTML='';
-  saved.forEach((item,i)=>{
+function loadQuickLinks(){
+  quickLinksContainer.innerHTML='';
+  tvChannels.forEach(ch=>{
     const a=document.createElement('a');
-    a.className='grid-item'; a.href=item.url; a.target='_blank';
-    const logo=item.logo?`<img src="${item.logo}" alt="${item.name}">`:'';
-    a.innerHTML=`${logo}<span>${item.name || item.url}</span>
-    <button class="delete-btn" data-i="${i}">×</button>`;
-    bookmarkContainer.appendChild(a);
-  });
-  document.querySelectorAll('.delete-btn').forEach(b=>{
-    b.onclick=e=>{
-      e.preventDefault(); e.stopPropagation();
-      let s=JSON.parse(localStorage.getItem('bookmarks')||'[]');
-      s.splice(b.dataset.i,1);
-      localStorage.setItem('bookmarks',JSON.stringify(s));
-      loadBookmarks();
-    }
+    a.className='grid-item';
+    a.href=ch.url; a.target='_blank';
+    a.innerHTML=`<img src="${ch.logo}" alt="${ch.name}"><span>${ch.name}</span>`;
+    quickLinksContainer.appendChild(a);
   });
 }
-loadBookmarks();
+loadQuickLinks();
 
 // ===== URL / Search =====
 input.oninput=()=>{
