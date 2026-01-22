@@ -1,184 +1,150 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>X Browser TV</title>
+<title>Sportzft Tv By Sany</title>
 <style>
-:root{
---primary-bg:#f0f2f5;--secondary-bg:#fff;--header-bg:#2c3e50;
---header-text:#fff;--text-color:#333;--border-color:#dcdcdc
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;align-items:center;height:100vh}
-.phone{width:100%;max-width:240px;aspect-ratio:3/4;display:flex;flex-direction:column;background:var(--primary-bg);overflow:hidden}
-.phone.desktop{max-width:420px;aspect-ratio:16/9}
-
-/* ===== STATUS BAR ===== */
-.status-bar{
-  background:#000;
-  color:#0f0;
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
-  padding:2px 6px;
-  font-family:monospace;
-  align-items:center;
-}
-.icons{
-  display:flex;
-  gap:4px;
-}
-
-/* ===== TOP BAR ===== */
-.top-bar{background:var(--header-bg);color:#fff;text-align:center;padding:4px;font-size:14px;font-weight:bold}
-.address-container{background:#fff;padding:5px;border-bottom:1px solid var(--border-color);position:relative}
-.url-bar-input{width:calc(100% - 30px);padding:5px 8px;border:1px solid var(--border-color);border-radius:15px;font-size:12}
-.add-bookmark{position:absolute;right:8px;top:7px;background:#2ecc71;color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:14px;cursor:pointer}
-.search-engine-list,.url-suggestions{display:none;position:absolute;top:38px;left:5px;width:calc(100% - 10px);background:#fff;border:1px solid var(--border-color);border-radius:5px;z-index:10;padding:3px;text-align:center}
-.search-engine-list span,.url-suggestions span{display:inline-block;background:#eee;padding:2px 6px;margin:2px;border-radius:10px;font-size:10px;cursor:pointer}
-
-/* ===== BROWSER CONTENT ===== */
-.browser-content{flex-grow:1;padding:8px;overflow-y:auto}
-.quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:12px 6px}
-.grid-item{position:relative;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#333;font-size:10px;text-align:center}
-.grid-item img{width:30px;height:30px;border-radius:6px;background:#fff;border:1px solid var(--border-color)}
-.grid-item span{width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
-.delete-btn{position:absolute;top:-5px;right:-5px;background:red;color:#fff;border:1px solid #fff;border-radius:50%;width:16px;height:16px;font-size:12px;line-height:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.bottom-nav{background:var(--header-bg);display:flex;justify-content:space-around;padding:4px 0}
-.bottom-nav a{color:#fff;font-size:16px;text-decoration:none;min-width:50px;text-align:center;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
+body{background:#121212;color:#fff;overflow-x:hidden;}
+.topbar{background:#1b1b1b;padding:12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a2a2a;}
+.left,.right{display:flex;align-items:center;gap:14px;position:relative;}
+.toggle,.search{font-size:22px;cursor:pointer;}
+.brand{font-size:22px;}
+#time{font-size:14px;opacity:.7;position:absolute;top:40px;right:0;text-align:right;}
+.drawer{position:fixed;top:0;left:-240px;width:240px;height:100%;background:#1c1c1c;transition:.3s;z-index:1000;}
+.drawer.active{left:0;}
+.drawer-header{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #333;}
+.drawer-header h3{font-size:18px;}
+.close{font-size:22px;cursor:pointer;}
+.drawer a{display:block;padding:12px 15px;color:#ccc;text-decoration:none;border-bottom:1px solid #2a2a2a;}
+.drawer a:hover{background:#2a2a2a;color:#fff;}
+.sub{padding:12px;border-bottom:1px solid #2a2a2a;}
+.sub .title{font-size:20px;color:#4fc3f7;}
+.searchbox{display:none;padding:10px;border-bottom:1px solid #2a2a2a;}
+.searchbox input{width:100%;padding:10px;background:#1f1f1f;border:none;color:#fff;outline:none;border-radius:5px;}
+.item{display:flex;align-items:center;padding:12px;border-bottom:1px solid #222;cursor:pointer;}
+.item:hover{background:#1f1f1f;}
+.logo{width:36px;height:24px;margin-right:12px;border-radius:3px;}
+.name{flex:1;}
+.lang{font-size:12px;opacity:.6;}
 </style>
 </head>
-
 <body>
-<div class="phone">
 
-<!-- ===== STATUS BAR ===== -->
-<div class="status-bar">
-  <span id="time">00:00</span>
-  <span class="icons">
-    📶 🔋<span id="battery">--%</span>
-  </span>
-</div>
-
-<div class="top-bar">X Browser TV</div>
-
-<div class="address-container">
-<input type="text" class="url-bar-input" placeholder="Type URL Or Search...">
-<button class="add-bookmark">+</button>
-<div class="search-engine-list">
-<span data-engine="google">Google</span>
-<span data-engine="bing">Bing</span>
-<span data-engine="yahoo">Yahoo</span>
-</div>
-<div class="url-suggestions">
-<span data-suffix=".com">.com</span>
-<span data-suffix=".bd">.bd</span>
-<span data-suffix=".net">.net</span>
-<span data-suffix=".org">.org</span>
-<span data-suffix=".xyz">.xyz</span>
-</div>
+<!-- SIDE DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h3>Menu</h3>
+    <div class="close" onclick="toggleDrawer()">✖</div>
+  </div>
+  <a href="https://mahmudsany.wapkizs.com#">Home</a>
+  <a href="https://crex.live">Cric Score</a>
+  <a href="https://www.sofascore.com">Foot Score</a>
+  <a href="https://machingliker-wapjo-xyz.zcpanel.com/edit-9.html">About</a>
 </div>
 
-<div class="browser-content">
-<h4>Quick Links / TV Channels</h4>
-<div id="quickLinks" class="quick-links-grid"></div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="left">
+    <div class="toggle" onclick="toggleDrawer()">☰</div>
+    <div class="brand">Sportzfy Tv</div>
+  </div>
+  <div class="right">
+    <div class="search" onclick="toggleSearch()">🔍</div>
+    <div id="time"></div>
+  </div>
 </div>
 
-<div class="bottom-nav">
-<a id="desktopToggle">🖥</a>
-<a id="goBtn">Go</a>
-<a>Exit</a>
+<!-- SUB -->
+<div class="sub">
+  <div class="title">Live Channel</div>
 </div>
+
+<!-- SEARCH -->
+<div class="searchbox" id="searchBox">
+  <input type="text" placeholder="Search channel..." onkeyup="filterChannels(this.value)">
 </div>
+
+<!-- CHANNELS -->
+<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMy">
+  <img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png" data-size="40x35">
+  <div class="name">T Sports</div>
+  <div class="lang"></div>
+</div>
+
+<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHM=">
+  <img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png" data-size="40x35">
+  <div class="name">T Sports2 HD</div>
+  <div class="lang"></div>
+</div>
+
+<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMx">
+  <img class="logo" src="https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png" data-size="40x35">
+  <div class="name">Willow</div>
+  <div class="lang"></div>
+</div>
+
+<div class="item channel" data-stream="aHR0cHM6Ly9tYWNoaW5nbGlra2VyLXdhcGpvLXp5eC56Y3BhbmVsLmNvbS9lZGl0LTEwLmh0bWw=">
+  <img class="logo" src="https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png" data-size="40x35">
+  <div class="name">Bein Sports1</div>
+  <div class="lang"></div>
+</div>
+
+<!-- Add all remaining channels here in same format -->
+<!-- data-stream attribute = Base64 encode of actual URL -->
+<!-- logo, name stay same -->
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-const input=document.querySelector('.url-bar-input');
-const engineList=document.querySelector('.search-engine-list');
-const suffixList=document.querySelector('.url-suggestions');
-const bookmarkBtn=document.querySelector('.add-bookmark');
-const goBtn=document.getElementById('goBtn');
-const phone=document.querySelector('.phone');
-const deskBtn=document.getElementById('desktopToggle');
-const quickLinksContainer=document.getElementById('quickLinks');
+// LOGO SIZE
+document.querySelectorAll(".logo").forEach(img=>{
+  const size = img.getAttribute("data-size");
+  if(size){
+    const [w,h] = size.split("x");
+    img.style.width = w + "px";
+    img.style.height = h + "px";
+  }
+});
 
-// Desktop toggle
-if(localStorage.getItem("desktopMode")==="on"){phone.classList.add("desktop")}
-deskBtn.onclick=()=>{
-  phone.classList.toggle("desktop");
-  localStorage.setItem("desktopMode",phone.classList.contains("desktop")?"on":"off");
-};
-
-// ===== TIME =====
+// TIME
 function updateTime(){
   const d=new Date();
-  let h=d.getHours(); let m=d.getMinutes();
-  if(h<10) h="0"+h; if(m<10) m="0"+m;
-  document.getElementById("time").innerText = h + ":" + m;
+  let h=d.getHours(), m=d.getMinutes();
+  let ap=h>=12?'PM':'AM';
+  h=h%12||12;
+  m=m<10?'0'+m:m;
+  document.getElementById("time").innerText=" "+h+":"+m+" "+ap;
 }
 setInterval(updateTime,1000);
 updateTime();
 
-// ===== REAL DEVICE BATTERY WITH CLOUD FALLBACK =====
-function setupBattery(){
-  const iconSpan = document.querySelector(".icons");
-  if(navigator.getBattery){
-    navigator.getBattery().then(battery=>{
-      function updateBattery(){
-        const level = Math.round(battery.level*100);
-        const charging = battery.charging;
-        if(charging) iconSpan.innerHTML = "📶 ⚡<span id='battery'>"+level+"%</span>";
-        else iconSpan.innerHTML = "📶 🔋<span id='battery'>"+level+"%</span>";
-      }
-      updateBattery();
-      battery.addEventListener("levelchange", updateBattery);
-      battery.addEventListener("chargingchange", updateBattery);
-    }).catch(()=>{iconSpan.innerHTML = "📶 ⚡<span id='battery'>100%</span>";});
-  } else iconSpan.innerHTML = "📶 ⚡<span id='battery'>100%</span>";
+// DRAWER
+function toggleDrawer(){
+  document.getElementById("drawer").classList.toggle("active");
 }
-setupBattery();
 
-// ===== QUICK LINKS TV CHANNELS =====
-const tvChannels=[
-  {name:"T Sports", url:"https://is.gd/sanyxtsports2", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
-  {name:"T Sports2 HD", url:"https://is.gd/sanyxtsports", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo.mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
-  {name:"Willow", url:"https://is.gd/sanyxtsports1", logo:"https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png"},
-  {name:"Bein Sports1", url:"https://is.gd/sanyxtsports4", logo:"https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png"},
-  {name:"Sport Tv", url:"https://is.gd/sanyxtsports5", logo:"https://flagcdn.com/w40/sa.png"}
-];
+// SEARCH
+function toggleSearch(){
+  const s=document.getElementById("searchBox");
+  s.style.display = s.style.display==="block"?"none":"block";
+}
 
-function loadQuickLinks(){
-  quickLinksContainer.innerHTML='';
-  tvChannels.forEach(ch=>{
-    const a=document.createElement('a');
-    a.className='grid-item';
-    a.href=ch.url; a.target='_blank';
-    a.innerHTML=`<img src="${ch.logo}" alt="${ch.name}"><span>${ch.name}</span>`;
-    quickLinksContainer.appendChild(a);
+// FILTER
+function filterChannels(val){
+  val=val.toLowerCase();
+  document.querySelectorAll(".channel").forEach(c=>{
+    c.style.display = c.innerText.toLowerCase().includes(val)?"flex":"none";
   });
 }
-loadQuickLinks();
 
-// ===== URL / Search =====
-input.oninput=()=>{
-  const v=input.value.trim();
-  engineList.style.display='none'; suffixList.style.display='none'; goBtn.innerText='';
-  if(!v) return;
-  if(v.includes(' ')||/^[^.]+$/.test(v)) engineList.style.display='block';
-  else if(/\.$/.test(v)) suffixList.style.display='block';
-  else goBtn.innerText='Go';
-};
-goBtn.onclick=()=>handleInput();
-function handleInput(){
-  let q=input.value.trim(); if(!q) return;
-  if(/\./.test(q) && !q.includes(' ')){
-    if(!/^https?:\/\//.test(q)) q='https://'+q;
-    location.href=q;
-  } else location.href='https://google.com/search?q='+encodeURIComponent(q);
-}
-
+// REDIRECT DECODE
+document.querySelectorAll('.channel').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    const encoded = el.getAttribute('data-stream');
+    const url = atob(encoded);
+    window.location.href = url;
+  });
 });
 </script>
 </body>
-</html>
+    </html>
