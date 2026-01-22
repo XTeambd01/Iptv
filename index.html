@@ -1,166 +1,1201 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sportzft Tv By Sany</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
-body{background:#121212;color:#fff;overflow-x:hidden;}
-.topbar{background:#1b1b1b;padding:12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a2a2a;}
-.left,.right{display:flex;align-items:center;gap:14px;position:relative;}
-.toggle,.search{font-size:22px;cursor:pointer;}
-.brand{font-size:22px;}
-#time{font-size:14px;opacity:.7;position:absolute;top:40px;right:0;text-align:right;}
-.drawer{position:fixed;top:0;left:-240px;width:240px;height:100%;background:#1c1c1c;transition:.3s;z-index:1000;}
-.drawer.active{left:0;}
-.drawer-header{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #333;}
-.drawer-header h3{font-size:18px;}
-.close{font-size:22px;cursor:pointer;}
-.drawer a{display:block;padding:12px 15px;color:#ccc;text-decoration:none;border-bottom:1px solid #2a2a2a;}
-.drawer a:hover{background:#2a2a2a;color:#fff;}
-.sub{padding:12px;border-bottom:1px solid #2a2a2a;}
-.sub .title{font-size:20px;color:#4fc3f7;}
-.searchbox{display:none;padding:10px;border-bottom:1px solid #2a2a2a;}
-.searchbox input{width:100%;padding:10px;background:#1f1f1f;border:none;color:#fff;outline:none;border-radius:5px;}
-.item{display:flex;align-items:center;padding:12px;border-bottom:1px solid #222;cursor:pointer;}
-.item:hover{background:#1f1f1f;}
-.logo{width:36px;height:24px;margin-right:12px;border-radius:3px;}
-.name{flex:1;}
-.lang{font-size:12px;opacity:.6;}
-</style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      RoarZone LIVE
+    </title>
+    <!-- SEO Meta (Preserved) -->
+    <meta name="author" content="Md Nayan" />
+    <meta name="description" content="RoarZone Live TV - Best Streaming Experience" />
+    <meta name="keywords" content="Live TV, Streaming, RoarZone, BD ISP" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet" />
+    <!-- Modern CSS -->
+    <link rel="stylesheet" href="assets/css/modern.css?v=3.2" />
+    <link rel="stylesheet" href="assets/css/animations.css?v=1.0" />
+    <link rel="stylesheet" href="assets/css/shoutbox.css?v=2.0" />
+    <link rel="stylesheet" href="assets/css/favorites.css?v=2.0" />
+    <link rel="stylesheet" href="assets/css/fix.css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <div class="main-container" style="padding-top: 20px;">
+      <!-- Player Section -->
+      <div class="player-wrapper" id="playerWrapper">
+        <iframe id="playerFrame" src="player.php?stream=edge2/tsports" allowfullscreen="" allow="autoplay; encrypted-media; playsinline">
+        </iframe>
+      </div>
+      <!-- Search Section -->
+      <div class="search-section">
+        <input type="text" id="channelSearch" class="search-input" placeholder="Search channels..." />
+        <div style="display: flex; gap: 10px;">
+          <a href="download.php?type=mobile" class="download-btn search-btn animate-pulse" target="_blank" style="white-space: nowrap;">          <i class="fas fa-mobile-alt"></i>
+          Mobile App
+</a>
+          <a href="download.php?type=tv" class="download-btn search-btn animate-pulse" target="_blank" style="background: linear-gradient(45deg, #00b09b, #96c93d); white-space: nowrap;">          <i class="fas fa-tv"></i>
+          TV App
+</a>
+        </div>
+      </div>
+      <!-- Promotional Popup -->
+      <div id="promoPopup" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
+        <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); width: 90%; max-width: 480px; border-radius: 20px; padding: 40px 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); position: relative; text-align: center; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+          <button onclick="closePromoPopup()" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); border: none; color: #cbd5e1; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;">
+            ×
+          </button>
+          <div style="font-size: 50px; margin-bottom: 20px; color: #4ade80; background: rgba(74, 222, 128, 0.1); width: 100px; height: 100px; line-height: 100px; border-radius: 50%; margin-left: auto; margin-right: auto; box-shadow: 0 0 30px rgba(74, 222, 128, 0.2);">
+            <i class="fas fa-tv"></i>
+          </div>
+          <h2 style="color: white; margin-bottom: 12px; font-size: 26px; font-weight: 700; font-family: &#39;Inter&#39;, sans-serif;">
+            📺 RoarZone TV অ্যাপ!
+          </h2>
+          <div style="color: #94a3b8; margin-bottom: 30px; font-size: 16px; line-height: 1.6;">
+            এখন থেকে আপনার Android TV তে সরাসরি আমাদের অ্যাপটি ব্যবহার করতে পারবেন।
+            <br />
+            <br />
+            কোনো সমস্যা বা পরামর্শ থাকলে আমাদের
+            <a href="https://fb.com/roarzone" target="_blank" style="color:#4ade80;text-decoration:underline;">            Facebook Page
+</a>
+            এ জানান।
+          </div>
+          <a href="download.php?type=tv" class="download-btn" style="display: flex; width: calc(100% - 20px); max-width: 280px; margin: 0 auto; justify-content: center; align-items: center; font-size: 15px; padding: 14px 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); text-decoration: none; box-sizing: border-box;">          <i class="fas fa-download" style="margin-right: 8px;"></i>
+          TV অ্যাপ ডাউনলোড করুন
+</a>
+        </div>
+      </div>
+      <script>
+        function closePromoPopup() {
+                const popup = document.getElementById(&#39;promoPopup&#39;);
+                popup.style.opacity = &#39;0&#39;;
+                popup.style.transform = &#39;scale(0.9)&#39;;
+                setTimeout(() =&gt; { popup.style.display = &#39;none&#39;; }, 300);
+                
+                // Set cooldown for 2 hours (in milliseconds)
+                const now = new Date().getTime();
+                localStorage.setItem(&#39;promo_popup_last_closed&#39;, now.toString());
+            }
 
-<!-- SIDE DRAWER -->
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <h3>Menu</h3>
-    <div class="close" onclick="toggleDrawer()">✖</div>
-  </div>
-  <a href="https://mahmudsany.wapkizs.com#">Home</a>
-  <a href="https://crex.live">Cric Score</a>
-  <a href="https://www.sofascore.com">Foot Score</a>
-  <a href="https://machingliker-wapjo-xyz.zcpanel.com/edit-9.html">About</a>
-</div>
+            window.addEventListener(&#39;load&#39;, () =&gt; {
+                const now = new Date().getTime();
+                const lastClosed = localStorage.getItem(&#39;promo_popup_last_closed&#39;);
+                const twoHours = 2 * 60 * 60 * 1000;
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="left">
-    <div class="toggle" onclick="toggleDrawer()">☰</div>
-    <div class="brand">Sportzfy Tv</div>
-  </div>
-  <div class="right">
-    <div class="search" onclick="toggleSearch()">🔍</div>
-    <div id="time"></div>
-  </div>
-</div>
+                // Show if never closed OR 2 hours have passed since last close
+                if (!lastClosed || (now - parseInt(lastClosed)) &gt; twoHours) {
+                    const popup = document.getElementById(&#39;promoPopup&#39;);
+                    popup.style.display = &#39;flex&#39;;
+                }
+            });
+        
+            // CSS Animation
+            const style = document.createElement(&#39;style&#39;);
+            style.innerHTML = `
+                @keyframes popIn {
+                    from { opacity: 0; transform: scale(0.8); translateY(20px); }
+                    to { opacity: 1; transform: scale(1); translateY(0); }
+                }
+                #promoPopup button:hover {
+                    background: rgba(255,255,255,0.2) !important;
+                    color: white !important;
+                }
+            `;
+            document.head.appendChild(style);
+      </script>
+      <!-- Category Navigation -->
+      <div class="category-nav">
+        <button class="category-btn active" data-category="*">
+          All
+        </button>
+        <button class="category-btn" data-category="favorites">
+          ⭐ Favorites
+        </button>
+        <button class="category-btn" data-category="sports">
+          🏆 Sports
+        </button>
+        <button class="category-btn" data-category="bangla">
+          bangla
+        </button>
+        <button class="category-btn" data-category="documentary">
+          documentary
+        </button>
+        <button class="category-btn" data-category="english">
+          english
+        </button>
+        <button class="category-btn" data-category="hindi">
+          hindi
+        </button>
+        <button class="category-btn" data-category="inbangla">
+          inbangla
+        </button>
+        <button class="category-btn" data-category="kids">
+          kids
+        </button>
+        <button class="category-btn" data-category="music">
+          music
+        </button>
+      </div>
+      <!-- Channel Grid -->
+      <div class="channel-grid">
+        <div class="channel-card" data-title="t sports" data-tags="sports" data-stream="edge2/tsports" onclick="playChannel(&#39;edge2/tsports&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/tsports&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/102.png" alt="T Sports" loading="lazy" />
+          <div class="channel-info">
+            T Sports
+          </div>
+        </div>
+        <div class="channel-card" data-title="star sports 1" data-tags="sports" data-stream="edge2/star-sports-1" onclick="playChannel(&#39;edge2/star-sports-1&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/star-sports-1&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/25.png" alt="Star Sports 1" loading="lazy" />
+          <div class="channel-info">
+            Star Sports 1
+          </div>
+        </div>
+        <div class="channel-card" data-title="star sports 2" data-tags="sports" data-stream="edge2/star-sports-2" onclick="playChannel(&#39;edge2/star-sports-2&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/star-sports-2&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/26.png" alt="Star Sports 2" loading="lazy" />
+          <div class="channel-info">
+            Star Sports 2
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony ten 1" data-tags="sports" data-stream="edge2/sony-sports-1-hd" onclick="playChannel(&#39;edge2/sony-sports-1-hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/sony-sports-1-hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/20.png" alt="Sony Ten 1" loading="lazy" />
+          <div class="channel-info">
+            Sony Ten 1
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony ten 2" data-tags="sports" data-stream="edge2/sony-sports-2-hd" onclick="playChannel(&#39;edge2/sony-sports-2-hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/sony-sports-2-hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/21.png" alt="Sony Ten 2" loading="lazy" />
+          <div class="channel-info">
+            Sony Ten 2
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony ten 3" data-tags="sports" data-stream="edge2/sony-sports-3-hd" onclick="playChannel(&#39;edge2/sony-sports-3-hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/sony-sports-3-hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/22.png" alt="Sony Ten 3" loading="lazy" />
+          <div class="channel-info">
+            Sony Ten 3
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony six" data-tags="sports" data-stream="edge2/sony-sports-5-hd" onclick="playChannel(&#39;edge2/sony-sports-5-hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/sony-sports-5-hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/24.png" alt="Sony SIX" loading="lazy" />
+          <div class="channel-info">
+            Sony SIX
+          </div>
+        </div>
+        <div class="channel-card" data-title="star sports select 1" data-tags="sports" data-stream="edge2/star-sports-select-1" onclick="playChannel(&#39;edge2/star-sports-select-1&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/star-sports-select-1&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/27.png" alt="Star Sports Select 1" loading="lazy" />
+          <div class="channel-info">
+            Star Sports Select 1
+          </div>
+        </div>
+        <div class="channel-card" data-title="star sports select 2" data-tags="sports" data-stream="edge2/star-sports-select-2" onclick="playChannel(&#39;edge2/star-sports-select-2&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/star-sports-select-2&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/28.png" alt="Star Sports Select 2" loading="lazy" />
+          <div class="channel-info">
+            Star Sports Select 2
+          </div>
+        </div>
+        <div class="channel-card" data-title="euro sports" data-tags="sports" data-stream="toffee/euro_sports_hd" onclick="playChannel(&#39;toffee/euro_sports_hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/euro_sports_hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/euro_sports_hd.png" alt="Euro Sports" loading="lazy" />
+          <div class="channel-info">
+            Euro Sports
+          </div>
+        </div>
+        <div class="channel-card" data-title="dubai sports" data-tags="sports" data-stream="bk/dubai-sports" onclick="playChannel(&#39;bk/dubai-sports&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/dubai-sports&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/dubai-sports.png" alt="Dubai Sports" loading="lazy" />
+          <div class="channel-info">
+            Dubai Sports
+          </div>
+        </div>
+        <div class="channel-card" data-title="ten cricket" data-tags="sports" data-stream="toffee/ten_cricket" onclick="playChannel(&#39;toffee/ten_cricket&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/ten_cricket&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/ten_cricket.png" alt="Ten Cricket" loading="lazy" />
+          <div class="channel-info">
+            Ten Cricket
+          </div>
+        </div>
+        <div class="channel-card" data-title="star gold select" data-tags="hindi" data-stream="bk/72" onclick="playChannel(&#39;bk/72&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/72&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/75.png" alt="Star Gold Select" loading="lazy" />
+          <div class="channel-info">
+            Star Gold Select
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony tv" data-tags="hindi" data-stream="bk/38" onclick="playChannel(&#39;bk/38&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/38&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/38.png" alt="Sony TV" loading="lazy" />
+          <div class="channel-info">
+            Sony TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony max" data-tags="hindi" data-stream="bk/77" onclick="playChannel(&#39;bk/77&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/77&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/sonymax.png" alt="Sony Max" loading="lazy" />
+          <div class="channel-info">
+            Sony Max
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony max hd" data-tags="hindi" data-stream="toffee/sony_max_hd" onclick="playChannel(&#39;toffee/sony_max_hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/sony_max_hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/sonymaxhd.png" alt="Sony Max HD" loading="lazy" />
+          <div class="channel-info">
+            Sony Max HD
+          </div>
+        </div>
+        <div class="channel-card" data-title="colors" data-tags="hindi" data-stream="bk/68" onclick="playChannel(&#39;bk/68&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/68&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/68.png" alt="Colors" loading="lazy" />
+          <div class="channel-info">
+            Colors
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony max 2" data-tags="hindi" data-stream="toffee/sonymax_2" onclick="playChannel(&#39;toffee/sonymax_2&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/sonymax_2&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/sonymax2.png" alt="Sony Max 2" loading="lazy" />
+          <div class="channel-info">
+            Sony Max 2
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee tv" data-tags="hindi" data-stream="bk/40" onclick="playChannel(&#39;bk/40&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/40&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/40.png" alt="ZEE TV" loading="lazy" />
+          <div class="channel-info">
+            ZEE TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee cinema" data-tags="hindi" data-stream="bk/76" onclick="playChannel(&#39;bk/76&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/76&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/76.png" alt="Zee Cinema" loading="lazy" />
+          <div class="channel-info">
+            Zee Cinema
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee bollywood" data-tags="hindi" data-stream="toffee/zee_bollywood" onclick="playChannel(&#39;toffee/zee_bollywood&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/zee_bollywood&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/94.png" alt="ZEE Bollywood" loading="lazy" />
+          <div class="channel-info">
+            ZEE Bollywood
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee action" data-tags="hindi" data-stream="toffee/zee_action" onclick="playChannel(&#39;toffee/zee_action&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/zee_action&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/90.png" alt="Zee Action" loading="lazy" />
+          <div class="channel-info">
+            Zee Action
+          </div>
+        </div>
+        <div class="channel-card" data-title="star plus" data-tags="hindi" data-stream="bk/67" onclick="playChannel(&#39;bk/67&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/67&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/67.png" alt="Star Plus" loading="lazy" />
+          <div class="channel-info">
+            Star Plus
+          </div>
+        </div>
+        <div class="channel-card" data-title="and tv hd" data-tags="hindi" data-stream="bk/74" onclick="playChannel(&#39;bk/74&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/74&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/74.png" alt="And TV HD" loading="lazy" />
+          <div class="channel-info">
+            And TV HD
+          </div>
+        </div>
+        <div class="channel-card" data-title="and pictures" data-tags="hindi" data-stream="bk/100" onclick="playChannel(&#39;bk/100&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/100&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/100.png" alt="And Pictures" loading="lazy" />
+          <div class="channel-info">
+            And Pictures
+          </div>
+        </div>
+        <div class="channel-card" data-title="hum tv" data-tags="hindi" data-stream="toffee/hum_tv" onclick="playChannel(&#39;toffee/hum_tv&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/hum_tv&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/humtv.png" alt="Hum TV" loading="lazy" />
+          <div class="channel-info">
+            Hum TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee-anmol" data-tags="hindi" data-stream="toffee/zee_anmol" onclick="playChannel(&#39;toffee/zee_anmol&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/zee_anmol&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/zee-anmol.png" alt="zee-anmol" loading="lazy" />
+          <div class="channel-info">
+            zee-anmol
+          </div>
+        </div>
+        <div class="channel-card" data-title="hum masala" data-tags="hindi" data-stream="toffee/hum_masala" onclick="playChannel(&#39;toffee/hum_masala&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/hum_masala&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/hummasala.png" alt="Hum Masala" loading="lazy" />
+          <div class="channel-info">
+            Hum Masala
+          </div>
+        </div>
+        <div class="channel-card" data-title="hum sitarey" data-tags="hindi" data-stream="toffee/hum_sitaray" onclick="playChannel(&#39;toffee/hum_sitaray&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/hum_sitaray&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/humsitarey.png" alt="Hum Sitarey" loading="lazy" />
+          <div class="channel-info">
+            Hum Sitarey
+          </div>
+        </div>
+        <div class="channel-card" data-title="b4u movies" data-tags="hindi" data-stream="toffee/b4u_movies" onclick="playChannel(&#39;toffee/b4u_movies&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/b4u_movies&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/b4umovies.png" alt="B4U Movies" loading="lazy" />
+          <div class="channel-info">
+            B4U Movies
+          </div>
+        </div>
+        <div class="channel-card" data-title="discovery hd" data-tags="documentary" data-stream="bk/83" onclick="playChannel(&#39;bk/83&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/83&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/43.png" alt="Discovery HD" loading="lazy" />
+          <div class="channel-info">
+            Discovery HD
+          </div>
+        </div>
+        <div class="channel-card" data-title="discovery science" data-tags="documentary" data-stream="toffee/discovery_science" onclick="playChannel(&#39;toffee/discovery_science&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/discovery_science&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/discoveryscience.png" alt="Discovery Science" loading="lazy" />
+          <div class="channel-info">
+            Discovery Science
+          </div>
+        </div>
+        <div class="channel-card" data-title="discovery turbo" data-tags="documentary" data-stream="toffee/discovery_turbo" onclick="playChannel(&#39;toffee/discovery_turbo&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/discovery_turbo&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/discoveryturbo.png" alt="Discovery Turbo" loading="lazy" />
+          <div class="channel-info">
+            Discovery Turbo
+          </div>
+        </div>
+        <div class="channel-card" data-title="discovery hd investigation" data-tags="documentary" data-stream="toffee/discovary_investigation_hd" onclick="playChannel(&#39;toffee/discovary_investigation_hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/discovary_investigation_hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/discoveryhdInvestigation.png" alt="Discovery HD Investigation" loading="lazy" />
+          <div class="channel-info">
+            Discovery HD Investigation
+          </div>
+        </div>
+        <div class="channel-card" data-title="cnn" data-tags="documentary" data-stream="toffee/cnn" onclick="playChannel(&#39;toffee/cnn&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/cnn&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/cnn.png" alt="cnn" loading="lazy" />
+          <div class="channel-info">
+            cnn
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony bbc earth hd" data-tags="documentary" data-stream="bk/44" onclick="playChannel(&#39;bk/44&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/44&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/44.png" alt="Sony BBC Earth HD" loading="lazy" />
+          <div class="channel-info">
+            Sony BBC Earth HD
+          </div>
+        </div>
+        <div class="channel-card" data-title="natgeo" data-tags="documentary" data-stream="bk/35" onclick="playChannel(&#39;bk/35&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/35&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/35.png" alt="Natgeo" loading="lazy" />
+          <div class="channel-info">
+            Natgeo
+          </div>
+        </div>
+        <div class="channel-card" data-title="animal planet" data-tags="documentary" data-stream="toffee/animal_planet_hd" onclick="playChannel(&#39;toffee/animal_planet_hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/animal_planet_hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/animalplanet.png" alt="Animal Planet" loading="lazy" />
+          <div class="channel-info">
+            Animal Planet
+          </div>
+        </div>
+        <div class="channel-card" data-title="star jalsha" data-tags="inbangla" data-stream="bk/30" onclick="playChannel(&#39;bk/30&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/30&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/30.png" alt="Star Jalsha" loading="lazy" />
+          <div class="channel-info">
+            Star Jalsha
+          </div>
+        </div>
+        <div class="channel-card" data-title="star jalsha movies" data-tags="inbangla" data-stream="bk/31" onclick="playChannel(&#39;bk/31&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/31&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/31.png" alt="Star Jalsha Movies" loading="lazy" />
+          <div class="channel-info">
+            Star Jalsha Movies
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee bangla" data-tags="inbangla" data-stream="bk/34" onclick="playChannel(&#39;bk/34&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/34&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/34.png" alt="Zee Bangla" loading="lazy" />
+          <div class="channel-info">
+            Zee Bangla
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee bangla cinema" data-tags="inbangla" data-stream="bk/29" onclick="playChannel(&#39;bk/29&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/29&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/29.png" alt="ZEE Bangla Cinema" loading="lazy" />
+          <div class="channel-info">
+            ZEE Bangla Cinema
+          </div>
+        </div>
+        <div class="channel-card" data-title="colors bangla" data-tags="inbangla" data-stream="bk/66" onclick="playChannel(&#39;bk/66&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/66&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/66.png" alt="Colors Bangla" loading="lazy" />
+          <div class="channel-info">
+            Colors Bangla
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony aath" data-tags="inbangla" data-stream="bk/33" onclick="playChannel(&#39;bk/33&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/33&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/33.png" alt="Sony Aath" loading="lazy" />
+          <div class="channel-info">
+            Sony Aath
+          </div>
+        </div>
+        <div class="channel-card" data-title="cartoon network" data-tags="kids" data-stream="bk/79" onclick="playChannel(&#39;bk/79&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/79&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/79.png" alt="Cartoon Network" loading="lazy" />
+          <div class="channel-info">
+            Cartoon Network
+          </div>
+        </div>
+        <div class="channel-card" data-title="nick" data-tags="kids" data-stream="bk/55" onclick="playChannel(&#39;bk/55&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/55&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/55.png" alt="Nick" loading="lazy" />
+          <div class="channel-info">
+            Nick
+          </div>
+        </div>
+        <div class="channel-card" data-title="pogo" data-tags="kids" data-stream="toffee/pogo_sd" onclick="playChannel(&#39;toffee/pogo_sd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/pogo_sd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/pogo.png" alt="POGO" loading="lazy" />
+          <div class="channel-info">
+            POGO
+          </div>
+        </div>
+        <div class="channel-card" data-title="discovery kids" data-tags="kids" data-stream="toffee/discovery_kids" onclick="playChannel(&#39;toffee/discovery_kids&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/discovery_kids&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/discoverykids.png" alt="Discovery Kids" loading="lazy" />
+          <div class="channel-info">
+            Discovery Kids
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony yay" data-tags="kids" data-stream="toffee/sonyyay" onclick="playChannel(&#39;toffee/sonyyay&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/sonyyay&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/sonyyay.png" alt="Sony Yay" loading="lazy" />
+          <div class="channel-info">
+            Sony Yay
+          </div>
+        </div>
+        <div class="channel-card" data-title="star movies" data-tags="english" data-stream="bk/starmovies" onclick="playChannel(&#39;bk/starmovies&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/starmovies&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/starmovies.png" alt="Star Movies" loading="lazy" />
+          <div class="channel-info">
+            Star Movies
+          </div>
+        </div>
+        <div class="channel-card" data-title="zee cafe hd" data-tags="english" data-stream="toffee/zee_cafe_hd" onclick="playChannel(&#39;toffee/zee_cafe_hd&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/zee_cafe_hd&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/69.png" alt="Zee Cafe HD" loading="lazy" />
+          <div class="channel-info">
+            Zee Cafe HD
+          </div>
+        </div>
+        <div class="channel-card" data-title="sony pix" data-tags="english" data-stream="bk/41" onclick="playChannel(&#39;bk/41&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/41&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/41.png" alt="Sony Pix" loading="lazy" />
+          <div class="channel-info">
+            Sony Pix
+          </div>
+        </div>
+        <div class="channel-card" data-title="dw news" data-tags="english" data-stream="bk/85" onclick="playChannel(&#39;bk/85&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/85&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/85.png" alt="DW NEWS" loading="lazy" />
+          <div class="channel-info">
+            DW NEWS
+          </div>
+        </div>
+        <div class="channel-card" data-title="al jazeera" data-tags="english" data-stream="bk/89" onclick="playChannel(&#39;bk/89&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/89&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/89.png" alt="Al Jazeera" loading="lazy" />
+          <div class="channel-info">
+            Al Jazeera
+          </div>
+        </div>
+        <div class="channel-card" data-title="gaan bangla" data-tags="music" data-stream="bk/58" onclick="playChannel(&#39;bk/58&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/58&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/58.png" alt="Gaan Bangla" loading="lazy" />
+          <div class="channel-info">
+            Gaan Bangla
+          </div>
+        </div>
+        <div class="channel-card" data-title="9xm" data-tags="music" data-stream="bk/48" onclick="playChannel(&#39;bk/48&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/48&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/48.png" alt="9xM" loading="lazy" />
+          <div class="channel-info">
+            9xM
+          </div>
+        </div>
+        <div class="channel-card" data-title="zing" data-tags="music" data-stream="toffee/Zing" onclick="playChannel(&#39;toffee/Zing&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/Zing&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/93.png" alt="ZING" loading="lazy" />
+          <div class="channel-info">
+            ZING
+          </div>
+        </div>
+        <div class="channel-card" data-title="b4u music" data-tags="music" data-stream="toffee/b4u_music" onclick="playChannel(&#39;toffee/b4u_music&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;toffee/b4u_music&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/b4umusic.png" alt="B4U Music" loading="lazy" />
+          <div class="channel-info">
+            B4U Music
+          </div>
+        </div>
+        <div class="channel-card" data-title="jamuna tv" data-tags="bangla" data-stream="edge2/jamunatv" onclick="playChannel(&#39;edge2/jamunatv&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/jamunatv&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/13.png" alt="Jamuna TV" loading="lazy" />
+          <div class="channel-info">
+            Jamuna TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="nagorik tv" data-tags="bangla" data-stream="edge2/nagorik" onclick="playChannel(&#39;edge2/nagorik&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/nagorik&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/59.png" alt="Nagorik TV" loading="lazy" />
+          <div class="channel-info">
+            Nagorik TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="channel 24" data-tags="bangla" data-stream="edge2/channel24" onclick="playChannel(&#39;edge2/channel24&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/channel24&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/5.png" alt="Channel 24" loading="lazy" />
+          <div class="channel-info">
+            Channel 24
+          </div>
+        </div>
+        <div class="channel-card" data-title="somoy tv" data-tags="bangla" data-stream="edge2/somoy" onclick="playChannel(&#39;edge2/somoy&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/somoy&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/17.png" alt="Somoy TV" loading="lazy" />
+          <div class="channel-info">
+            Somoy TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="ekushy tv" data-tags="bangla" data-stream="bk/65" onclick="playChannel(&#39;bk/65&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/65&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/65.png" alt="Ekushy TV" loading="lazy" />
+          <div class="channel-info">
+            Ekushy TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="asian tv" data-tags="bangla" data-stream="edge/asian-tv" onclick="playChannel(&#39;edge/asian-tv&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge/asian-tv&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/62.png" alt="Asian TV" loading="lazy" />
+          <div class="channel-info">
+            Asian TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="atn bangla" data-tags="bangla" data-stream="bk/2" onclick="playChannel(&#39;bk/2&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/2&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/2.png" alt="ATN Bangla" loading="lazy" />
+          <div class="channel-info">
+            ATN Bangla
+          </div>
+        </div>
+        <div class="channel-card" data-title="atn news" data-tags="bangla" data-stream="edge2/atn-news" onclick="playChannel(&#39;edge2/atn-news&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/atn-news&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/49.png" alt="ATN NEWS" loading="lazy" />
+          <div class="channel-info">
+            ATN NEWS
+          </div>
+        </div>
+        <div class="channel-card" data-title="banglavision tv" data-tags="bangla" data-stream="bk/3" onclick="playChannel(&#39;bk/3&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/3&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/3.png" alt="Banglavision TV" loading="lazy" />
+          <div class="channel-info">
+            Banglavision TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="bangla tv" data-tags="bangla" data-stream="bk/19" onclick="playChannel(&#39;bk/19&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/19&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/19.png" alt="Bangla TV" loading="lazy" />
+          <div class="channel-info">
+            Bangla TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="boishakhi tv" data-tags="bangla" data-stream="bk/61" onclick="playChannel(&#39;bk/61&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/61&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/61.png" alt="Boishakhi TV" loading="lazy" />
+          <div class="channel-info">
+            Boishakhi TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="btv" data-tags="bangla" data-stream="bk/53" onclick="playChannel(&#39;bk/53&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/53&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/53.png" alt="BTV" loading="lazy" />
+          <div class="channel-info">
+            BTV
+          </div>
+        </div>
+        <div class="channel-card" data-title="btv world" data-tags="bangla" data-stream="bk/84" onclick="playChannel(&#39;bk/84&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/84&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/84.png" alt="BTV World" loading="lazy" />
+          <div class="channel-info">
+            BTV World
+          </div>
+        </div>
+        <div class="channel-card" data-title="channel 9" data-tags="bangla" data-stream="bk/4" onclick="playChannel(&#39;bk/4&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/4&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/4.png" alt="Channel 9" loading="lazy" />
+          <div class="channel-info">
+            Channel 9
+          </div>
+        </div>
+        <div class="channel-card" data-title="channel i" data-tags="bangla" data-stream="bk/6" onclick="playChannel(&#39;bk/6&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/6&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/6.png" alt="Channel I" loading="lazy" />
+          <div class="channel-info">
+            Channel I
+          </div>
+        </div>
+        <div class="channel-card" data-title="dbc news" data-tags="bangla" data-stream="bk/7" onclick="playChannel(&#39;bk/7&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/7&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/7.png" alt="DBC News" loading="lazy" />
+          <div class="channel-info">
+            DBC News
+          </div>
+        </div>
+        <div class="channel-card" data-title="ekattor tv" data-tags="bangla" data-stream="bk/11" onclick="playChannel(&#39;bk/11&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/11&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/11.png" alt="Ekattor TV" loading="lazy" />
+          <div class="channel-info">
+            Ekattor TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="deepto tv" data-tags="bangla" data-stream="bk/8" onclick="playChannel(&#39;bk/8&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/8&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/8.png" alt="Deepto TV" loading="lazy" />
+          <div class="channel-info">
+            Deepto TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="desh tv" data-tags="bangla" data-stream="bk/9" onclick="playChannel(&#39;bk/9&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/9&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/9.png" alt="Desh TV" loading="lazy" />
+          <div class="channel-info">
+            Desh TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="duronto tv" data-tags="bangla" data-stream="bk/10" onclick="playChannel(&#39;bk/10&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/10&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/10.png" alt="Duronto TV" loading="lazy" />
+          <div class="channel-info">
+            Duronto TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="independent tv" data-tags="bangla" data-stream="bk/12" onclick="playChannel(&#39;bk/12&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/12&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/12.png" alt="Independent TV" loading="lazy" />
+          <div class="channel-info">
+            Independent TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="maasranga" data-tags="bangla" data-stream="bk/51" onclick="playChannel(&#39;bk/51&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/51&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/51.png" alt="Maasranga" loading="lazy" />
+          <div class="channel-info">
+            Maasranga
+          </div>
+        </div>
+        <div class="channel-card" data-title="mohona tv" data-tags="bangla" data-stream="bk/50" onclick="playChannel(&#39;bk/50&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/50&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/50.png" alt="Mohona TV" loading="lazy" />
+          <div class="channel-info">
+            Mohona TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="movie bangla tv" data-tags="bangla" data-stream="bk/86" onclick="playChannel(&#39;bk/86&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/86&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/86.png" alt="Movie Bangla TV" loading="lazy" />
+          <div class="channel-info">
+            Movie Bangla TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="my tv" data-tags="bangla" data-stream="bk/56" onclick="playChannel(&#39;bk/56&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/56&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/56.png" alt="MY TV" loading="lazy" />
+          <div class="channel-info">
+            MY TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="news24" data-tags="bangla" data-stream="bk/18" onclick="playChannel(&#39;bk/18&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/18&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/18.png" alt="News24" loading="lazy" />
+          <div class="channel-info">
+            News24
+          </div>
+        </div>
+        <div class="channel-card" data-title="ntv" data-tags="bangla" data-stream="bk/54" onclick="playChannel(&#39;bk/54&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/54&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/54.png" alt="NTV" loading="lazy" />
+          <div class="channel-info">
+            NTV
+          </div>
+        </div>
+        <div class="channel-card" data-title="rtv" data-tags="bangla" data-stream="bk/14" onclick="playChannel(&#39;bk/14&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/14&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/14.png" alt="RTV" loading="lazy" />
+          <div class="channel-info">
+            RTV
+          </div>
+        </div>
+        <div class="channel-card" data-title="sa tv" data-tags="bangla" data-stream="bk/15" onclick="playChannel(&#39;bk/15&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/15&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/15.png" alt="SA TV" loading="lazy" />
+          <div class="channel-info">
+            SA TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="sangsad tv" data-tags="bangla" data-stream="bk/88" onclick="playChannel(&#39;bk/88&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;bk/88&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/88.png" alt="Sangsad TV" loading="lazy" />
+          <div class="channel-info">
+            Sangsad TV
+          </div>
+        </div>
+        <div class="channel-card" data-title="ekhon" data-tags="bangla" data-stream="edge2/ekhontv" onclick="playChannel(&#39;edge2/ekhontv&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;edge2/ekhontv&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/ekhon-tv.jpg" alt="ekhon" loading="lazy" />
+          <div class="channel-info">
+            ekhon
+          </div>
+        </div>
+        <div class="channel-card" data-title="bijoy-tv" data-tags="bangla" data-stream="ext/bijoy-tv" onclick="playChannel(&#39;ext/bijoy-tv&#39;)">
+          <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(&#39;ext/bijoy-tv&#39;, this)">
+            <i class="far fa-heart"></i>
+          </button>
+          <img src="https://tvassets.roarzone.info/images/bijoy-tv.jpg" alt="bijoy-tv" loading="lazy" />
+          <div class="channel-info">
+            bijoy-tv
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Shoutbox -->
+    <div class="shoutbox-container collapsed" id="shoutboxContainer">
+      <div class="shoutbox-header" onclick="toggleShoutbox()">
+        <h3>
+          <i class="fas fa-comments"></i>
+          <span class="shoutbox-title">          Shoutbox
+</span>
+        </h3>
+        <button class="shoutbox-toggle" id="shoutboxToggle">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+      <div class="shoutbox-body" id="shoutboxBody">
+        <!-- Messages will load here -->
+      </div>
+      <div class="shoutbox-form" id="shoutboxForm">
+        <input type="text" id="shoutName" placeholder="Your name..." maxlength="50" />
+        <textarea id="shoutMessage" placeholder="Your message..." maxlength="200">
+        </textarea>
+        <button onclick="postShout()">
+          Send
+        </button>
+      </div>
+    </div>
+    <!-- Footer -->
+    <footer class="modern-footer">
+      <div class="footer-content">
+        <!-- Useful Links -->
+        <div class="footer-section links-section">
+          <h3>
+            Useful Links
+          </h3>
+          <div class="link-grid">
+            <a href="https://play.roarzone.info" target="_blank" class="footer-link">            <i class="fas fa-play-circle"></i>
+            Emby Server
+</a>
+            <a href="https://cdn.roarzone.info" target="_blank" class="footer-link">            <i class="fas fa-server"></i>
+            FTP Server
+</a>
+            <a href="https://fb.com/roarzone" target="_blank" class="footer-link">            <i class="fab fa-facebook"></i>
+            Facebook Page
+</a>
+          </div>
+        </div>
+      </div>
+      <!-- Copyright -->
+      <div class="footer-bottom">
+        <p>
+          © Copyright
+          <a href="https://roarzone.info" target="_blank">          RoarZone
+</a>
+          2015-2026 All right reserved
+        </p>
+        <p>
+          Developed by
+          <a href="https://fb.com/mdnoyan789" target="_blank">          Md Nayan
+</a>
+        </p>
+      </div>
+    </footer>
+    <!-- Scripts -->
+    <script>
+      // Favorites functionality
+        function getFavorites() {
+            const favs = localStorage.getItem(&#39;tv_favorites&#39;);
+            return favs ? JSON.parse(favs) : [];
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem(&#39;tv_favorites&#39;, JSON.stringify(favorites));
+        }
+        
+        function toggleFavorite(streamName, btn) {
+            let favorites = getFavorites();
+            const index = favorites.indexOf(streamName);
+            
+            if (index &gt; -1) {
+                // Remove from favorites
+                favorites.splice(index, 1);
+                btn.querySelector(&#39;i&#39;).classList.remove(&#39;fas&#39;);
+                btn.querySelector(&#39;i&#39;).classList.add(&#39;far&#39;);
+                btn.classList.remove(&#39;active&#39;);
+            } else {
+                // Add to favorites
+                favorites.push(streamName);
+                btn.querySelector(&#39;i&#39;).classList.remove(&#39;far&#39;);
+                btn.querySelector(&#39;i&#39;).classList.add(&#39;fas&#39;);
+                btn.classList.add(&#39;active&#39;);
+            }
+            
+            saveFavorites(favorites);
+        }
+        
+        // Load favorites on page load
+        window.addEventListener(&#39;DOMContentLoaded&#39;, function() {
+            const favorites = getFavorites();
+            document.querySelectorAll(&#39;.channel-card&#39;).forEach(card =&gt; {
+                const stream = card.dataset.stream;
+                const btn = card.querySelector(&#39;.favorite-btn&#39;);
+                if (favorites.includes(stream)) {
+                    btn.querySelector(&#39;i&#39;).classList.remove(&#39;far&#39;);
+                    btn.querySelector(&#39;i&#39;).classList.add(&#39;fas&#39;);
+                    btn.classList.add(&#39;active&#39;);
+                }
+            });
+        });
+    </script>
+    <script src="assets/js/app.js?v=1769089030">
+    </script>
+    <!-- Shoutbox Script -->
+    <script>
+      function toggleShoutbox() {
+            const container = document.getElementById(&#39;shoutboxContainer&#39;);
+            const body = document.getElementById(&#39;shoutboxBody&#39;);
+            const form = document.getElementById(&#39;shoutboxForm&#39;);
+            const toggle = document.getElementById(&#39;shoutboxToggle&#39;);
+            
+            container.classList.toggle(&#39;collapsed&#39;);
+            
+            // Prevent body scroll on mobile when shoutbox is open
+            if (!container.classList.contains(&#39;collapsed&#39;)) {
+                document.body.classList.add(&#39;shoutbox-open&#39;);
+                loadShouts();
+            } else {
+                document.body.classList.remove(&#39;shoutbox-open&#39;);
+            }
+        }
+        
+        let replyingTo = null;
+        
+        function loadShouts() {
+            fetch(&#39;shoutbox_api.php&#39;)
+                .then(res =&gt; res.json())
+                .then(data =&gt; {
+                    if (data.success) {
+                        const body = document.getElementById(&#39;shoutboxBody&#39;);
+                        body.innerHTML = data.messages.map(msg =&gt; {
+                            let replyHTML = &#39;&#39;;
+                            if (msg.reply_to) {
+                                replyHTML = `
+                                    &lt;div class=&#34;reply-to&#34;&gt;
+                                        &lt;span class=&#34;name&#34;&gt;↩ ${msg.reply_to.name}&lt;/span&gt;: ${msg.reply_to.message}
+                                    &lt;/div&gt;
+                                `;
+                            }
+                            
+                            return `
+                                &lt;div class=&#34;shoutbox-message&#34; data-id=&#34;${msg.id}&#34;&gt;
+                                    &lt;div&gt;
+                                        &lt;span class=&#34;name&#34;&gt;${msg.name}&lt;/span&gt;
+                                        &lt;span class=&#34;time&#34;&gt;${msg.time}&lt;/span&gt;
+                                    &lt;/div&gt;
+                                    ${replyHTML}
+                                    &lt;div class=&#34;text&#34;&gt;${msg.message}&lt;/div&gt;
+                                    &lt;div class=&#34;reply-link&#34; onclick=&#34;setReply(${msg.id}, &#39;${msg.name.replace(/&#39;/g, &#34;\\&#39;&#34;)}&#39;, &#39;${msg.message.replace(/&#39;/g, &#34;\\&#39;&#34;)}&#39;)&#34;&gt;
+                                        Reply
+                                    &lt;/div&gt;
+                                &lt;/div&gt;
+                            `;
+                        }).join(&#39;&#39;);
+                        body.scrollTop = body.scrollHeight;
+                    }
+                })
+                .catch(err =&gt; console.log(&#39;Shoutbox error:&#39;, err));
+        }
+        
+        function setReply(id, name, message) {
+            replyingTo = { id, name, message };
+            const messageBox = document.getElementById(&#39;shoutMessage&#39;);
+            messageBox.placeholder = `💬 Replying to ${name}...`;
+            messageBox.focus();
+        }
+        
+        function postShout() {
+            const name = document.getElementById(&#39;shoutName&#39;).value.trim() || &#39;Anonymous&#39;;
+            const message = document.getElementById(&#39;shoutMessage&#39;).value.trim();
+            
+            if (!message) {
+                alert(&#39;Please enter a message!&#39;);
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append(&#39;name&#39;, name);
+            formData.append(&#39;message&#39;, message);
+            if (replyingTo) {
+                formData.append(&#39;reply_to&#39;, replyingTo.id);
+            }
+            
+            fetch(&#39;shoutbox_api.php&#39;, {
+                method: &#39;POST&#39;,
+                body: formData
+            })
+            .then(res =&gt; res.json())
+            .then(data =&gt; {
+                if (data.success) {
+                    document.getElementById(&#39;shoutMessage&#39;).value = &#39;&#39;;
+                    document.getElementById(&#39;shoutMessage&#39;).placeholder = &#39;Your message...&#39;;
+                    replyingTo = null;
+                    loadShouts();
+                } else {
+                    alert(&#39;Failed to post message&#39;);
+                }
+            })
+            .catch(err =&gt; console.log(&#39;Post error:&#39;, err));
+        }
+        
+        // Enter key to send
+        document.getElementById(&#39;shoutMessage&#39;)?.addEventListener(&#39;keypress&#39;, function(e) {
+            if (e.key === &#39;Enter&#39; &amp;&amp; !e.shiftKey) {
+                e.preventDefault();
+                postShout();
+            }
+        });
+        
+        // Auto-refresh only when open
+        setInterval(function() {
+            const container = document.getElementById(&#39;shoutboxContainer&#39;);
+            if (!container.classList.contains(&#39;collapsed&#39;)) {
+                loadShouts();
+            }
+        }, 5000);
+    </script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+  import { initializeApp } from &#34;https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js&#34;;
+  import { getAnalytics } from &#34;https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js&#34;;
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-<!-- SUB -->
-<div class="sub">
-  <div class="title">Live Channel</div>
-</div>
+  // Your web app&#39;s Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: &#34;AIzaSyCkzhojEcbQ4c7MKrJQrVwVTq2bz6WYJAo&#34;,
+    authDomain: &#34;roarzone-live.firebaseapp.com&#34;,
+    projectId: &#34;roarzone-live&#34;,
+    storageBucket: &#34;roarzone-live.firebasestorage.app&#34;,
+    messagingSenderId: &#34;159200538028&#34;,
+    appId: &#34;1:159200538028:web:9a38a9dc2e220b38771e09&#34;,
+    measurementId: &#34;G-B834HPK0BJ&#34;
+  };
 
-<!-- SEARCH -->
-<div class="searchbox" id="searchBox">
-  <input type="text" placeholder="Search channel..." onkeyup="filterChannels(this.value)">
-</div>
-
-<!-- CHANNELS -->
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMy">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">T Sports</div>
-  <div class="lang"></div>
-</div>
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHM=">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">T Sports2 HD</div>
-  <div class="lang"></div>
-</div>
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMx">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">Willow</div>
-  <div class="lang"></div>
-</div>
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMy">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">Bein Sports1</div>
-  <div class="lang"></div>
-</div>
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHM1">
-  <img class="logo" src="https://flagcdn.com/w40/sa.png" data-size="40x35">
-  <div class="name">Sport Tv</div>
-  <div class="lang"></div>
-</div>
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eG5hZ29yaWt0djI=">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/4c761a143999e2f234d6914cd64418f3/mahmudsany+wapkizs+com/Nagorik-tv-png-(mahmudsany.wapkizs.com).png" data-size="40x35">
-  <div class="name">Nagorik Tv</div>
-  <div class="lang"></div>
-</div>
-
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eGFzcG9ydHM=">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/ac39d890706f762375118180eae925e4/youtube99+wapo+mobi/images-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">A Sports</div>
-  <div class="lang"></div>
-</div>
-
-<script>
-// LOGO SIZE
-document.querySelectorAll(".logo").forEach(img=>{
-  const size = img.getAttribute("data-size");
-  if(size){
-    const [w,h] = size.split("x");
-    img.style.width = w + "px";
-    img.style.height = h + "px";
-  }
-});
-
-// TIME
-function updateTime(){
-  const d=new Date();
-  let h=d.getHours(), m=d.getMinutes();
-  let ap=h>=12?'PM':'AM';
-  h=h%12||12;
-  m=m<10?'0'+m:m;
-  document.getElementById("time").innerText=" "+h+":"+m+" "+ap;
-}
-setInterval(updateTime,1000);
-updateTime();
-
-// DRAWER
-function toggleDrawer(){
-  document.getElementById("drawer").classList.toggle("active");
-}
-
-// SEARCH
-function toggleSearch(){
-  const s=document.getElementById("searchBox");
-  s.style.display = s.style.display==="block"?"none":"block";
-}
-
-// FILTER
-function filterChannels(val){
-  val=val.toLowerCase();
-  document.querySelectorAll(".channel").forEach(c=>{
-    c.style.display = c.innerText.toLowerCase().includes(val)?"flex":"none";
-  });
-}
-
-// REDIRECT DECODE
-document.querySelectorAll('.channel').forEach(el=>{
-  el.addEventListener('click', ()=>{
-    const encoded = el.getAttribute('data-stream');
-    const url = atob(encoded);
-    window.location.href = url;
-  });
-});
-</script>
-
-</body>
-    </html>
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+    </script>
+  </body>
+</html>
