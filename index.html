@@ -5,18 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sportzft Tv By Sany</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
-body{background:#121212;color:#fff;overflow-x:hidden;}
+*{margin:0; padding:0; box-sizing:border-box; font-family: Arial, Helvetica, sans-serif;}
+body{background:#121212; color:#fff; overflow-x:hidden;}
 .topbar{background:#1b1b1b;padding:12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a2a2a;}
 .left,.right{display:flex;align-items:center;gap:14px;position:relative;}
 .toggle,.search{font-size:22px;cursor:pointer;}
 .brand{font-size:22px;}
-#time{font-size:14px;opacity:.7;position:absolute;top:40px;right:0;text-align:right;}
+#time{font-size:14px;opacity:.7;position:absolute;top:40px;right:0;}
 .drawer{position:fixed;top:0;left:-240px;width:240px;height:100%;background:#1c1c1c;transition:.3s;z-index:1000;}
 .drawer.active{left:0;}
 .drawer-header{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #333;}
-.drawer-header h3{font-size:18px;}
-.close{font-size:22px;cursor:pointer;}
 .drawer a{display:block;padding:12px 15px;color:#ccc;text-decoration:none;border-bottom:1px solid #2a2a2a;}
 .drawer a:hover{background:#2a2a2a;color:#fff;}
 .sub{padding:12px;border-bottom:1px solid #2a2a2a;}
@@ -27,124 +25,50 @@ body{background:#121212;color:#fff;overflow-x:hidden;}
 .item:hover{background:#1f1f1f;}
 .logo{width:36px;height:24px;margin-right:12px;border-radius:3px;}
 .name{flex:1;}
-.lang{font-size:12px;opacity:.6;}
 </style>
 </head>
+
 <body>
 
-<!-- SIDE DRAWER -->
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <h3>Menu</h3>
-    <div class="close" onclick="toggleDrawer()">✖</div>
-  </div>
-  <a href="https://mahmudsany.wapkizs.com#">Home</a>
-  <a href="https://crex.live">Cric Score</a>
-  <a href="https://www.sofascore.com">Foot Score</a>
-  <a href="https://machingliker-wapjo-xyz.zcpanel.com/edit-9.html">About</a>
-</div>
+<div class="sub"><div class="title">Live Channel</div></div>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="left">
-    <div class="toggle" onclick="toggleDrawer()">☰</div>
-    <div class="brand">Sportzfy Tv</div>
-  </div>
-  <div class="right">
-    <div class="search" onclick="toggleSearch()">🔍</div>
-    <div id="time"></div>
-  </div>
-</div>
+<!-- CHANNELS (ENCODED) -->
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZx')">
+<img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png">
+<div class="name">T Sports</div></div>
 
-<!-- SUB -->
-<div class="sub">
-  <div class="title">Live Channel</div>
-</div>
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZy')">
+<img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png">
+<div class="name">T Sports 2</div></div>
 
-<!-- SEARCH -->
-<div class="searchbox" id="searchBox">
-  <input type="text" placeholder="Search channel..." onkeyup="filterChannels(this.value)">
-</div>
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZz')">
+<img class="logo" src="https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png">
+<div class="name">Willow</div></div>
 
-<!-- CHANNELS -->
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMy">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">T Sports</div>
-  <div class="lang"></div>
-</div>
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZA')">
+<img class="logo" src="https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png">
+<div class="name">Bein Sports 1</div></div>
 
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHM=">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">T Sports2 HD</div>
-  <div class="lang"></div>
-</div>
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZB')">
+<img class="logo" src="https://flagcdn.com/w40/sa.png">
+<div class="name">Sport TV</div></div>
 
-<div class="item channel" data-stream="aHR0cHM6Ly9pcy5nZC9zYW55eHRzcG9ydHMx">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">Willow</div>
-  <div class="lang"></div>
-</div>
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZC')">
+<img class="logo" src="https://pix1.wapkizfile.info/download/4c761a143999e2f234d6914cd64418f3/mahmudsany+wapkizs+com/Nagorik-tv-png-(mahmudsany.wapkizs.com).png">
+<div class="name">Nagorik TV</div></div>
 
-<div class="item channel" data-stream="aHR0cHM6Ly9tYWNoaW5nbGlra2VyLXdhcGpvLXp5eC56Y3BhbmVsLmNvbS9lZGl0LTEwLmh0bWw=">
-  <img class="logo" src="https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png" data-size="40x35">
-  <div class="name">Bein Sports1</div>
-  <div class="lang"></div>
-</div>
-
-<!-- Add all remaining channels here in same format -->
-<!-- data-stream attribute = Base64 encode of actual URL -->
-<!-- logo, name stay same -->
+<div class="item channel" onclick="go('Rk5sZ3t2eUp7d1h1TnZD')">
+<img class="logo" src="https://pix1.wapkizfile.info/download/ac39d890706f762375118180eae925e4/youtube99+wapo+mobi/images-png-(youtube99.wapo.mobi).png">
+<div class="name">A Sports</div></div>
 
 <script>
-// LOGO SIZE
-document.querySelectorAll(".logo").forEach(img=>{
-  const size = img.getAttribute("data-size");
-  if(size){
-    const [w,h] = size.split("x");
-    img.style.width = w + "px";
-    img.style.height = h + "px";
-  }
-});
-
-// TIME
-function updateTime(){
-  const d=new Date();
-  let h=d.getHours(), m=d.getMinutes();
-  let ap=h>=12?'PM':'AM';
-  h=h%12||12;
-  m=m<10?'0'+m:m;
-  document.getElementById("time").innerText=" "+h+":"+m+" "+ap;
+function go(e){
+  e=e.split('').reverse().join('');
+  let r='';
+  for(let i=0;i<e.length;i++) r+=String.fromCharCode(e.charCodeAt(i)-1);
+  location.href=atob(r);
 }
-setInterval(updateTime,1000);
-updateTime();
-
-// DRAWER
-function toggleDrawer(){
-  document.getElementById("drawer").classList.toggle("active");
-}
-
-// SEARCH
-function toggleSearch(){
-  const s=document.getElementById("searchBox");
-  s.style.display = s.style.display==="block"?"none":"block";
-}
-
-// FILTER
-function filterChannels(val){
-  val=val.toLowerCase();
-  document.querySelectorAll(".channel").forEach(c=>{
-    c.style.display = c.innerText.toLowerCase().includes(val)?"flex":"none";
-  });
-}
-
-// REDIRECT DECODE
-document.querySelectorAll('.channel').forEach(el=>{
-  el.addEventListener('click', ()=>{
-    const encoded = el.getAttribute('data-stream');
-    const url = atob(encoded);
-    window.location.href = url;
-  });
-});
 </script>
+
 </body>
-    </html>
+</html>
