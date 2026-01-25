@@ -1,194 +1,225 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IP TV PLAYER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>IPTV Pro</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
-:root{
---primary-bg:#f0f2f5;--secondary-bg:#fff;--header-bg:#2c3e50;
---header-text:#fff;--text-color:#333;--border-color:#dcdcdc
+:root {
+  --primary: #0091EA;
+  --bg: #111111;
+  --surface: #000000;
+  --text: #FFFFFF;
+  --focus: #0091EA;
+  --divider: #333333;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;background:#e0e0e0;display:flex;justify-content:center;align-items:center;height:100vh}
-.phone{width:100%;max-width:240px;aspect-ratio:3/4;display:flex;flex-direction:column;background:var(--primary-bg);overflow:hidden}
-.phone.desktop{max-width:420px;aspect-ratio:16/9}
-
-/* ===== STATUS BAR ===== */
-.status-bar{
-  background:#000;
-  color:#0f0;
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
-  padding:2px 6px;
-  font-family:monospace;
-  align-items:center;
-}
-.icons{
-  display:flex;
-  gap:4px;
-}
-
-/* ===== TOP BAR ===== */
-.top-bar{background:var(--header-bg);color:#fff;text-align:center;padding:4px;font-size:14px;font-weight:bold}
-.address-container{background:#fff;padding:5px;border-bottom:1px solid var(--border-color);position:relative}
-.url-bar-input{width:calc(100% - 30px);padding:5px 8px;border:1px solid var(--border-color);border-radius:15px;font-size:12}
-.add-bookmark{position:absolute;right:8px;top:7px;background:#2ecc71;color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:14px;cursor:pointer}
-.search-engine-list,.url-suggestions{display:none;position:absolute;top:38px;left:5px;width:calc(100% - 10px);background:#fff;border:1px solid var(--border-color);border-radius:5px;z-index:10;padding:3px;text-align:center}
-.search-engine-list span,.url-suggestions span{display:inline-block;background:#eee;padding:2px 6px;margin:2px;border-radius:10px;font-size:10px;cursor:pointer}
-
-/* ===== BROWSER CONTENT ===== */
-.browser-content{flex-grow:1;padding:8px;overflow-y:auto}
-.quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:12px 6px}
-.grid-item{position:relative;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#333;font-size:10px;text-align:center}
-.grid-item img{width:30px;height:30px;border-radius:6px;background:#fff;border:1px solid var(--border-color)}
-.grid-item span{width:100%;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
-.bottom-nav{background:var(--header-bg);display:flex;justify-content:space-around;padding:4px 0}
-.bottom-nav a{color:#fff;font-size:16px;text-decoration:none;min-width:50px;text-align:center;cursor:pointer}
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; }
+body { background-color: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; font-size: 16px; overflow: hidden; height: 100vh; width: 100vw; }
+#header { background-color: var(--primary); height: 40px; display: flex; align-items: center; padding-left: 10px; font-weight: 700; font-size: 18px; position: fixed; top: 0; left: 0; right: 0; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.view-section { display: none; margin-top: 40px; height: calc(100vh - 70px); overflow-y: auto; }
+.view-section.active { display: block; }
+.channel-item { padding: 12px 10px; border-bottom: 1px solid var(--divider); display: flex; align-items: center; background-color: transparent; cursor: pointer; }
+.channel-item.focused, .menu-item.focused { background-color: var(--focus) !important; color: white !important; }
+.channel-logo { width: 40px; height: 40px; margin-right: 15px; background: #fff; object-fit: contain; border-radius: 2px; }
+.channel-info { flex: 1; overflow: hidden; }
+.channel-name { font-weight: 500; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.group-title { font-size: 12px; color: #aaa; margin-top: 4px; display: block; }
+.channel-item.focused .group-title { color: #ddd; }
+.menu-item { padding: 15px 10px; border-bottom: 1px solid var(--divider); font-size: 16px; background: var(--surface); cursor: pointer; }
+#search-view { padding: 0; }
+#search-container { padding: 10px; background: #222; }
+#search-input { width: 100%; padding: 8px; background: #000; border: 1px solid #555; color: white; font-size: 16px; }
+#search-input:focus { border-color: var(--primary); }
+#player-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 100; display: none; }
+video { width: 100%; height: 100%; object-fit: contain; }
+#soft-keys { position: fixed; bottom: 0; left: 0; right: 0; height: 30px; background-color: var(--surface); display: flex; justify-content: space-between; align-items: center; padding: 0 10px; z-index: 200; border-top: 1px solid #333; }
+.key-col { width: 33%; display: flex; align-items: center; height: 100%; }
+#lsk { justify-content: flex-start; }
+#csk { justify-content: center; }
+#rsk { justify-content: flex-end; }
+.key-icon { width: 24px; height: 24px; fill: white; }
+#custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; }
+.alert-box { background-color: #222; width: 85%; max-width: 300px; border: 1px solid #444; border-radius: 4px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+.alert-header { background: var(--primary); color: white; padding: 10px; font-weight: bold; }
+.alert-body { padding: 20px 15px; color: #ddd; font-size: 15px; line-height: 1.4; }
+.alert-footer { padding: 10px; text-align: right; background: #111; }
+.alert-btn { background: transparent; border: 2px solid var(--primary); color: var(--primary); padding: 5px 15px; font-weight: bold; text-transform: uppercase; }
+.alert-btn:focus { background: var(--primary); color: white; }
+#file-upload { display: none; }
 </style>
 </head>
-
 <body>
-<div class="phone">
 
-<!-- ===== STATUS BAR ===== -->
-<div class="status-bar">
-  <span id="time">00:00</span>
-  <span class="icons">
-    📶 🔋<span id="battery">--%</span>
-  </span>
+<div id="header">IPTV</div>
+
+<div id="home-view" class="view-section active">
+  <div id="channel-list"></div>
 </div>
 
-<div class="top-bar">X Browser TV</div>
-
-<div class="address-container">
-<input type="text" class="url-bar-input" placeholder="Type URL Or Search...">
-<button class="add-bookmark">+</button>
-<div class="search-engine-list">
-<span data-engine="google">Google</span>
-<span data-engine="bing">Bing</span>
-<span data-engine="yahoo">Yahoo</span>
-</div>
-<div class="url-suggestions">
-<span data-suffix=".com">.com</span>
-<span data-suffix=".bd">.bd</span>
-<span data-suffix=".net">.net</span>
-<span data-suffix=".org">.org</span>
-<span data-suffix=".xyz">.xyz</span>
-</div>
+<div id="menu-view" class="view-section">
+  <div class="menu-item focused" data-action="search">Search Channel</div>
+  <div class="menu-item" data-action="upload">Load Playlist (M3U)</div>
+  <div class="menu-item" data-action="reset">Reset Defaults</div>
+  <div class="menu-item" data-action="about">About</div>
 </div>
 
-<div class="browser-content">
-<h4>Quick Links / TV Channels</h4>
-<div id="quickLinks" class="quick-links-grid"></div>
+<div id="search-view" class="view-section">
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Type name...">
+  </div>
+  <div id="search-results"></div>
 </div>
 
-<div class="bottom-nav">
-<a id="desktopToggle">🖥</a>
-<a id="goBtn">Go</a>
-<a>Exit</a>
+<div id="player-view">
+  <video id="video-player" controls playsinline></video>
 </div>
+
+<input type="file" id="file-upload" accept=".m3u,.txt">
+
+<div id="custom-alert-overlay">
+  <div class="alert-box">
+    <div class="alert-header">About</div>
+    <div class="alert-body" id="custom-alert-msg"></div>
+    <div class="alert-footer">
+      <center><button id="custom-alert-ok" class="alert-btn">OK</button></center>
+    </div>
+  </div>
+</div>
+
+<div id="soft-keys">
+  <div class="key-col" id="lsk">
+    <svg class="key-icon" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+  </div>
+  <div class="key-col" id="csk">
+    <svg class="key-icon" id="icon-center" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+  </div>
+  <div class="key-col" id="rsk">
+    <svg class="key-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  </div>
 </div>
 
 <script>
-const input=document.querySelector('.url-bar-input');
-const engineList=document.querySelector('.search-engine-list');
-const suffixList=document.querySelector('.url-suggestions');
-const goBtn=document.getElementById('goBtn');
-const phone=document.querySelector('.phone');
-const deskBtn=document.getElementById('desktopToggle');
-const quickLinksContainer=document.getElementById('quickLinks');
+// --- CONFIGURATION ---
+var DEFAULT_M3U = '#EXTM3U\n' +
+'#EXTINF:-1 group-title="Bangla" tvg-logo="https://dl.dropbox.com/s/leielj83em5kg7h/somoy_news.png",Somoy TV\n' +
+'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8\n' +
+'#EXTINF:-1 group-title="Bangla" tvg-logo="https://dl.dropbox.com/s/k7z1dsec1jfjbkn/jamuna_tv_bd.png",Jamuna TV\n' +
+'https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8\n' +
+'#EXTINF:-1 group-title="Sports" tvg-logo="https://upload.wikimedia.org/wikipedia/en/2/29/TSportsBD.png",T Sports\n' +
+'http://103.60.204.26:3255/TSportsHD/tracks-v1a1/mono.m3u8\n' +
+'#EXTINF:-1 group-title="Entertainment" tvg-logo="https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Sony_Entertainment_Television_logo.svg/1200px-Sony_Entertainment_Television_logo.svg.png",Sony TV\n' +
+'http://103.60.204.26:3255/SonyEntertainmentTelevisionHD/tracks-v1a1/mono.m3u8';
 
-// Desktop toggle
-if(localStorage.getItem("desktopMode")==="on"){phone.classList.add("desktop")}
-deskBtn.onclick=()=>{
-  phone.classList.toggle("desktop");
-  localStorage.setItem("desktopMode",phone.classList.contains("desktop")?"on":"off");
+var channels=[], filteredChannels=[], currentView='home', focusIndex=0;
+var elHeader=document.getElementById('header');
+var elHome=document.getElementById('home-view');
+var elMenu=document.getElementById('menu-view');
+var elSearch=document.getElementById('search-view');
+var elPlayer=document.getElementById('player-view');
+var elVideo=document.getElementById('video-player');
+var elList=document.getElementById('channel-list');
+var elSearchResults=document.getElementById('search-results');
+var elSearchInput=document.getElementById('search-input');
+var iconCenter=document.getElementById('icon-center');
+var ICON_TICK='<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>';
+var ICON_PLAY='<path d="M8 5v14l11-7z"/>';
+var ICON_PAUSE='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+
+// Custom alert
+window.alert=function(message){
+  var overlay=document.getElementById('custom-alert-overlay');
+  var msgDiv=document.getElementById('custom-alert-msg');
+  var btn=document.getElementById('custom-alert-ok');
+  msgDiv.innerText=message;
+  overlay.style.display='flex';
+  btn.focus();
+  btn.onclick=function(){ overlay.style.display='none'; if(currentView==='home'||currentView==='search') updateFocus(); else if(currentView==='menu'){ var items=elMenu.children; if(items[focusIndex]) items[focusIndex].classList.add('focused'); } };
 };
 
-// ===== TIME =====
-function updateTime(){
-  const d=new Date();
-  let h=d.getHours(); let m=d.getMinutes();
-  if(h<10) h="0"+h; if(m<10) m="0"+m;
-  document.getElementById("time").innerText = h + ":" + m;
-}
-setInterval(updateTime,1000);
-updateTime();
-
-// ===== REAL DEVICE BATTERY =====
-function setupBattery(){
-  const iconSpan = document.querySelector(".icons");
-  if(navigator.getBattery){
-    navigator.getBattery().then(battery=>{
-      function updateBattery(){
-        const level = Math.round(battery.level*100);
-        const charging = battery.charging;
-        if(charging) iconSpan.innerHTML = "📶 ⚡<span id='battery'>"+level+"%</span>";
-        else iconSpan.innerHTML = "📶 🔋<span id='battery'>"+level+"%</span>";
-      }
-      updateBattery();
-      battery.addEventListener("levelchange", updateBattery);
-      battery.addEventListener("chargingchange", updateBattery);
-    }).catch(()=>{iconSpan.innerHTML = "📶 ⚡<span id='battery'>100%</span>";});
-  } else iconSpan.innerHTML = "📶 ⚡<span id='battery'>100%</span>";
-}
-setupBattery();
-
-// ===== TV CHANNELS QUICK-LINKS =====
-const tvChannels=[
-  {name:"T Sports", url:"https://is.gd/sanyxtsports2", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo+mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
-  {name:"T Sports2 HD", url:"https://is.gd/sanyxtsports", logo:"https://pix1.wapkizfile.info/download/9aafc288ccddc61f5c8ac5bf5c9380db/youtube99+wapo.mobi/flagcdn-png-(youtube99.wapo.mobi).png"},
-  {name:"Willow", url:"https://is.gd/sanyxtsports1", logo:"https://pix1.wapkizfile.info/download/c7835a591eba171804cb7866db6b73ce/youtube99+wapo+mobi/download1-png-(youtube99.wapo.mobi).png"},
-  {name:"Bein Sports1", url:"https://is.gd/sanyxtsports4", logo:"https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png"},
-  {name:"Sport Tv", url:"https://is.gd/sanyxtsports5", logo:"https://flagcdn.com/w40/sa.png"},
-  {name:"Nagorik Tv", url:"https://is.gd/sanyxnagoriktv2", logo:"https://pix1.wapkizfile.info/download/4c761a143999e2f234d6914cd64418f3/mahmudsany+wapkizs+com/Nagorik-tv-png-(mahmudsany.wapkizs.com).png"},
-  {name:"Sony Sports 1", url:"https://falconftp.noobmaster.xyz/SONYSPORTS1HD/tracks-v1a1/mono.m3u8", logo:"https://pix1.wapkizfile.info/download/d810b6b4f943792151eaca22f6b75f5e/youtube99+wapo+mobi/lmage22-png-(youtube99.wapo.mobi).png"},
-  {name:"Sony Sports 2", url:"https://falconftp.noobmaster.xyz/SONYSPORTS2HD/tracks-v1a1/mono.m3u8", logo:"https://pix1.wapkizfile.info/download/d89beec390ed8a95c1308e6bf057eebd/youtube99+wapo.mobi/download-2026-01-11T123513-975-png-(youtube99.wapo.mobi).png"},
-  {name:"Sony Sports 5", url:"https://falconftp.noobmaster.xyz/SONYSPORTS5HD/tracks-v1a1/mono.m3u8", logo:"https://pix1.wapkizfile.info/download/44058e07cd489d637a3091540c530453/youtube99+wapo+mobi/download2-png-(youtube99.wapo.mobi).png"},
-  {name:"Bein Sports Extra", url:"https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8", logo:"https://pix1.wapkizfile.info/download/8a1e7ac77d641cb207a2b059bc637514/youtube99+wapo+mobi/download-2026-01-11T123417-938-(youtube99.wapo.mobi).png"},
-  {name:"Solhsport", url:"https://stream.snexus.co/live/SN_WILDLIFE/main_stream.m3u8", logo:"https://pix1.wapkizfile.info/download/1aa6aaa32507df344f3cc4dec4670243/youtube99+wapo+mobi/sports-logo1-png-(youtube99.wapo.mobi).png"},
-  {name:"Gtv", url:"https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDDEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFsaWRtaW51aiPhnPTI2/gazibdz.stream/tracks-v1a1/mono.m3u8", logo:"https://pix1.wapkizfile.info/download/9d219a0165893ffb112b570ca58fcc23/youtube99+wapo+mobi/sports-logogtv1-png-(youtube99.wapo.mobi).png"},
-  {name:"Sports2", url:"https://pepsi.abntv.live/hls/4spstream.m3u8", logo:"https://pix1.wapkizfile.info/download/4b34c5a754125eaa9a31f432505743ce/youtube99+wapo+mobi/download-2026-01-11T123441-172-(youtube99.wapo.mobi).png"},
-  {name:"Pro Sports", url:"https://proshls.wns.live/hls/stream.m3u8", logo:"https://flagcdn.com/w40/id.png"},
-  {name:"Fifa Tv", url:"https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8", logo:"https://pix1.wapkizfile.info/download/9d5b92a631e37fe094d4b04e621c7d57/youtube99+wapo.mobi/images-2026-01-11T123642-900-(youtube99.wapo.mobi).png"},
-  {name:"Psn Sports", url:"https://cdn4.skygo.mn/live/disk1/SPSPlay/HLSv3-FTA/SPSPlay.m3u8", logo:"https://pix1.wapkizfile.info/download/ef307636590a67dfe1484ab16d5b773b/youtube99+wapo+mobi/sports-logo2-png-(youtube99.wapo.mobi).png"},
-  {name:"Psn Sports3", url:"https://cdn4.skygo.mn/live/disk1/SPSPlus/HLSv3-FTA/SPSPlus.m3u8", logo:"https://pix1.wapkizfile.info/download/32bfbdbb1f77353a8cfcc7b734b7809d/youtube99+wapo.mobi/sports-logo3-png-(youtube99.wapo.mobi).png"},
-  {name:"Fancode Sports", url:"https://bd-mc-fdlive.fancode.com/mumbai/138937_english_hls_023f5d29dd72240_1ta-di_h264/1080p.m3u8", logo:"https://pix1.wapkizfile.info/download/ac39d890706f762375118180eae925e4/youtube99+wapo.mobi/images-png-(youtube99.wapo.mobi).png"},
-  {name:"Fancode 2", url:"https://is.gd/sanyxfancode2", logo:"https://pix1.wapkizfile.info/download/ac39d890706f762375118180eae925e4/youtube99+wapo.mobi/images-png-(youtube99.wapo.mobi).png"},
-  {name:"A Sports", url:"https://is.gd/sanyxasports", logo:"https://pix1.wapkizfile.info/download/ac39d890706f762375118180eae925e4/youtube99+wapo.mobi/images-png-(youtube99.wapo.mobi).png"}
-];
-
-function loadQuickLinks(){
-  quickLinksContainer.innerHTML='';
-  tvChannels.forEach(ch=>{
-    const a=document.createElement('a');
-    a.className='grid-item';
-    a.href=ch.url; a.target='_blank';
-    a.innerHTML=`<img src="${ch.logo}" alt="${ch.name}"><span>${ch.name}</span>`;
-    quickLinksContainer.appendChild(a);
-  });
-}
-loadQuickLinks();
-
-// ===== URL / Search =====
-input.oninput=()=>{
-  const v=input.value.trim();
-  engineList.style.display='none'; suffixList.style.display='none'; goBtn.innerText='';
-  if(!v) return;
-  if(v.includes(' ')||/^[^.]+$/.test(v)) engineList.style.display='block';
-  else if(/\.$/.test(v)) suffixList.style.display='block';
-  else goBtn.innerText='Go';
+// INIT
+window.onload=function(){
+  var savedData=localStorage.getItem('bd_iptv_playlist');
+  if(!savedData){ localStorage.setItem('bd_iptv_playlist', DEFAULT_M3U); savedData=DEFAULT_M3U; }
+  parseM3U(savedData);
+  renderChannels(channels,elList);
+  history.replaceState({view:'home'},"Home","");
+  window.onpopstate=function(event){ if(event.state) switchView(event.state.view,false); else switchView('home',false); };
 };
-goBtn.onclick=()=>handleInput();
-function handleInput(){
-  let q=input.value.trim(); if(!q) return;
-  if(/\./.test(q) && !q.includes(' ')){
-    if(!/^https?:\/\//.test(q)) q='https://'+q;
-    location.href=q;
-  } else location.href='https://google.com/search?q='+encodeURIComponent(q);
+
+// Parse M3U
+function parseM3U(data){ var lines=data.split('\n'); channels=[]; var item={}; for(var i=0;i<lines.length;i++){ var line=lines[i].trim(); if(line.indexOf('#EXTINF:')===0){ var logo=line.match(/tvg-logo="([^"]*)"/); item.logo=logo?logo[1]:''; var group=line.match(/group-title="([^"]*)"/); item.group=group?group[1]:'General'; var parts=line.split(','); item.name=parts[parts.length-1].trim(); } else if(line.length>0 && line.indexOf('#')!==0){ item.url=line; channels.push(item); item={}; } }}
+
+// Render channels
+function renderChannels(data,container){
+  container.innerHTML='';
+  if(data.length===0){ container.innerHTML='<div style="padding:20px;text-align:center;color:#777">No channels</div>'; return; }
+  for(var i=0;i<data.length;i++){
+    var div=document.createElement('div'); div.className='channel-item';
+    div.innerHTML='<img src="'+(data[i].logo||'')+'" class="channel-logo" onerror="this.style.display=\'none\'"><div class="channel-info"><span class="channel-name">'+data[i].name+'</span><span class="group-title">'+data[i].group+'</span></div>';
+    (function(idx){ div.onclick=function(){ focusIndex=idx; updateFocus(); playChannel(data[idx].url); }; })(i);
+    container.appendChild(div);
+  }
+  updateFocus();
 }
+
+// Switch view
+function switchView(viewName,pushHistory){
+  elHome.classList.remove('active'); elMenu.classList.remove('active'); elSearch.classList.remove('active'); elPlayer.style.display='none';
+  if(currentView==='player' && viewName!=='player'){ elVideo.pause(); elVideo.src=''; }
+  currentView=viewName; focusIndex=0;
+  if(viewName==='home'){ elHome.classList.add('active'); elHeader.innerText="IPTV"; iconCenter.innerHTML=ICON_TICK; updateFocus(); }
+  else if(viewName==='menu'){ elMenu.classList.add('active'); elHeader.innerText="Menu"; iconCenter.innerHTML=ICON_TICK; updateFocus(); }
+  else if(viewName==='search'){ elSearch.classList.add('active'); elHeader.innerText="Search"; iconCenter.innerHTML=ICON_TICK; elSearchInput.value=''; elSearchInput.focus(); elSearchResults.innerHTML=''; }
+  else if(viewName==='player'){ elPlayer.style.display='block'; elHeader.innerText="Playing..."; iconCenter.innerHTML=ICON_PAUSE; }
+  if(pushHistory) history.pushState({view:viewName},viewName,"#"+viewName);
+}
+
+// Update focus
+function updateFocus(){ var items; if(currentView==='home') items=elList.children; else if(currentView==='menu') items=elMenu.children; else if(currentView==='search') items=elSearchResults.children; else return; for(var i=0;i<items.length;i++) items[i].classList.remove('focused'); if(items.length>0){ if(focusIndex>=items.length) focusIndex=items.length-1; if(focusIndex<0) focusIndex=0; items[focusIndex].classList.add('focused'); items[focusIndex].scrollIntoView({block:"center"}); }}
+
+// Handle Enter
+function handleEnter(){
+  if(currentView==='home'){ if(channels[focusIndex]) playChannel(channels[focusIndex].url); }
+  else if(currentView==='menu'){ var action=elMenu.children[focusIndex].getAttribute('data-action');
+    if(action==='search') switchView('search',true);
+    else if(action==='upload') document.getElementById('file-upload').click();
+    else if(action==='reset'){ localStorage.setItem('bd_iptv_playlist', DEFAULT_M3U); alert("Defaults Restored!"); location.reload(); }
+    else if(action==='about') alert("IPTV Pro v1.0\nFor CloudPhone");
+  }
+  else if(currentView==='search'){ if(document.activeElement===elSearchInput){ elSearchInput.blur(); focusIndex=0; updateFocus(); } else{ if(filteredChannels[focusIndex]) playChannel(filteredChannels[focusIndex].url); } }
+  else if(currentView==='player'){ if(elVideo.paused){ elVideo.play(); iconCenter.innerHTML=ICON_PAUSE; } else { elVideo.pause(); iconCenter.innerHTML=ICON_PLAY; } }
+}
+
+// Play channel
+function playChannel(url){ switchView('player',true); if(Hls.isSupported()){ var hls=new Hls(); hls.loadSource(url); hls.attachMedia(elVideo); hls.on(Hls.Events.MANIFEST_PARSED,function(){ elVideo.play(); }); } else if(elVideo.canPlayType('application/vnd.apple.mpegurl')){ elVideo.src=url; elVideo.play(); } else { alert("Unsupported format"); }}
+
+// File Upload
+document.getElementById('file-upload').addEventListener('change',function(e){
+  var file=e.target.files[0]; if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){ localStorage.setItem('bd_iptv_playlist', e.target.result); parseM3U(e.target.result); renderChannels(channels,elList); alert("Playlist Loaded!"); history.back(); };
+  reader.readAsText(file);
+});
+
+// Search input
+elSearchInput.addEventListener('input',function(e){ var term=e.target.value.toLowerCase(); filteredChannels=channels.filter(function(ch){return ch.name.toLowerCase().includes(term);}); renderChannels(filteredChannels,elSearchResults); });
+
+// Key navigation
+document.addEventListener('keydown',function(e){
+  var key=e.key;
+  if(document.getElementById('custom-alert-overlay').style.display==='flex'){ e.preventDefault(); e.stopPropagation(); if(key==='Enter'||key==='SoftCenter'||key==='5') document.getElementById('custom-alert-ok').click(); return; }
+  if(key==='ArrowDown'){ focusIndex++; updateFocus(); }
+  else if(key==='ArrowUp'){ focusIndex--; updateFocus(); }
+  else if(key==='Enter'||key==='SoftCenter'||key==='5'){ handleEnter(); }
+  else if(key==='SoftLeft'||key==='F1'){ if(currentView==='home') switchView('menu',true); }
+  else if(key==='SoftRight'||key==='F2'||key==='Backspace'){ history.back(); e.preventDefault(); }
+});
+
+// Softkeys
+document.getElementById('lsk').onclick=function(){ if(currentView==='home') switchView('menu',true); };
+document.getElementById('rsk').onclick=function(){ history.back(); };
+document.getElementById('csk').onclick=handleEnter;
 </script>
 </body>
-  </html>
+</html>
