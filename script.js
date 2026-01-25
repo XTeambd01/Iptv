@@ -1,5 +1,5 @@
 const urls=[
-"https://raw.githubusercontent.com/munim-sah75/Cofs_TV/refs/heads/main/fancode.m3u",
+"https://raw.githubusercontent.com/sanyahmed07/playlist1/refs/heads/main/playlist.m3u",
 "https://raw.githubusercontent.com/biostartvworld/playlist/refs/heads/main/playlist.m3u",
 "https://raw.githubusercontent.com/sm-monirulislam/RoarZone-Auto-Update-playlist/refs/heads/main/RoarZone.m3u"
 ]
@@ -194,7 +194,7 @@ const now=new Date();let hours=now.getHours();const minutes=now.getMinutes().toS
 },1000)
 
 const tg=document.createElement("a")
-tg.href="https://t.me/biostartvworld"
+tg.href="https://t.me/bslpabna"
 tg.target="_blank"
 tg.id="telegramChat"
 tg.innerHTML=`<svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><path d="M9.04 15.84 8.7 19.6c.49 0 .7-.21.96-.46l2.3-2.2 4.77 3.49c.87.48 1.49.23 1.7-.8l3.08-14.44h0c.26-1.22-.44-1.7-1.28-1.39L1.62 9.2c-1.18.46-1.16 1.12-.2 1.42l4.7 1.47L17.4 5.9c.55-.36 1.06-.16.64.2"/></svg>`
@@ -213,3 +213,4 @@ icon.addEventListener("mouseleave",()=>{controlsBoard.style.background="transpar
 })
 
 Promise.all(urls.map(u=>fetch(u).then(r=>r.text()).catch(()=>null))).then(r=>{r.filter(Boolean).forEach(parseM3U);renderCategory();renderList(channels)})
+
