@@ -59,7 +59,7 @@ header{
   pointer-events:none;
   z-index:10;
       }
-
+#videoWrap{ position:relative; }
 #poster{
   position:absolute;
   inset:0;
@@ -185,6 +185,7 @@ header{
   #left{position:sticky;top:56px;z-index:999}
   #videoWrap{height:100%}
 }
+
 
 
 
