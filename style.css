@@ -55,7 +55,7 @@ header{
   height:70px;
   z-index:7;
   opacity:.5;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,.6));
+  filter:drop-shadow(0 4px 7px rgba(0,0,0,.5));
   pointer-events:none
 }
 
@@ -185,6 +185,7 @@ header{
   #left{position:sticky;top:56px;z-index:999}
   #videoWrap{height:100%}
 }
+
 
 
 
