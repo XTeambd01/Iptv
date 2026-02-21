@@ -9,283 +9,142 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
 body{background:#121212;color:#fff;overflow-x:hidden;}
 
-/* ===== TOP BAR ===== */
-.topbar{
-  background:#1b1b1b;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid #2a2a2a;
+/* ===== PRELOADER ===== */
+.preloader{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:#121212;display:flex;align-items:center;
+justify-content:center;flex-direction:column;z-index:9999;
 }
+
+.love-spinner{
+width:60px;
+height:60px;
+background: #ff4fc3;
+clip-path: polygon(50% 0%, 61% 17%, 79% 17%, 92% 32%, 100% 50%, 92% 68%, 79% 83%, 61% 83%, 50% 100%, 39% 83%, 21% 83%, 8% 68%, 0 50%, 8% 32%, 21% 17%, 39% 17%);
+animation:loveSpin 1.5s linear infinite;
+margin-bottom:15px;
+}
+
+@keyframes loveSpin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+.loading-text{margin-top:15px;opacity:.9;font-size:14px;color:#ff4fc3;}
+
+/* ===== ORIGINAL CSS ===== */
+.logo{margin-right:12px;border-radius:3px;object-fit:cover;}
+.topbar{background:#1b1b1b;padding:12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a2a2a;}
 .left,.right{display:flex;align-items:center;gap:14px;position:relative;}
+.toggle,.search{font-size:22px;cursor:pointer;}
 .brand{font-size:22px;}
-.search{font-size:22px;cursor:pointer;}
+#time{font-size:14px;opacity:.7;position:absolute;top:40px;right:0;text-align:right;}
 
-#time{
-  font-size:14px;
-  opacity:.7;
-  position:absolute;
-  top:40px;
-  right:0;
-}
+.drawer{position:fixed;top:0;left:-240px;width:240px;height:100%;background:#1c1c1c;transition:.3s;z-index:1000;}
+.drawer.active{left:0;}
+.drawer-header{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #333;}
+.drawer a{display:block;padding:12px 15px;color:#ccc;text-decoration:none;border-bottom:1px solid #2a2a2a;}
+.drawer a:hover{background:#2a2a2a;color:#fff;}
 
-/* ===== SUB ===== */
 .sub{padding:12px;border-bottom:1px solid #2a2a2a;}
 .sub .title{font-size:20px;color:#4fc3f7;}
 
-/* ===== SEARCH ===== */
 .searchbox{display:none;padding:10px;border-bottom:1px solid #2a2a2a;}
-.searchbox input{
-  width:100%;
-  padding:10px;
-  background:#1f1f1f;
-  border:none;
-  color:#fff;
-  outline:none;
-  border-radius:5px;
-}
+.searchbox input{width:100%;padding:10px;background:#1f1f1f;border:none;color:#fff;outline:none;border-radius:5px;}
 
-/* ===== CHANNEL ===== */
-.item{
-  display:flex;
-  align-items:center;
-  padding:12px;
-  border-bottom:1px solid #222;
-  cursor:pointer;
-}
+.item{display:flex;align-items:center;padding:12px;border-bottom:1px solid #222;cursor:pointer;}
 .item:hover{background:#1f1f1f;}
-.logo{
-  width:36px;
-  height:24px;
-  margin-right:12px;
-  border-radius:3px;
-}
+.logo{width:36px;height:24px;margin-right:12px;border-radius:3px;}
 .name{flex:1;}
 .lang{font-size:12px;opacity:.6;}
-
-/* ===== BOTTOM BAR ===== */
-.bottom-bar{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:50px;
-  background:black;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 20px;
-  z-index:1000;
-}
-.menu-icon,.back-icon{
-  color:white;
-  font-size:24px;
-  cursor:pointer;
-}
-
-/* ===== SIDEBAR ===== */
-.sidebar{
-  position:fixed;
-  top:0;
-  left:-250px;
-  width:250px;
-  height:100%;
-  background:#222;
-  transition:0.3s;
-  z-index:1100;
-}
-.sidebar-header{
-  background:#1ea7d7;
-  padding:15px;
-  font-weight:bold;
-  font-size:20px;
-}
-.sidebar ul{list-style:none;padding:0;margin:0;}
-.sidebar ul li{
-  padding:15px;
-  font-size:18px;
-  cursor:pointer;
-}
-.sidebar ul li:hover{background:#333;}
-
-/* ===== OVERLAY ===== */
-.overlay{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.4);
-  display:none;
-  z-index:1000;
-}
-
-/* ===== MODAL ===== */
-.modal{
-  position:fixed;
-  inset:0;
-  background:#1f1f1f;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  flex-direction:column;
-  z-index:1200;
-}
-.modal-buttons{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:50px;
-  background:black;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 20px;
-}
-.modal-buttons span{
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-}
 </style>
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">Menu</div>
-  <ul>
-    <li onclick="startClear()">Clear Data</li>
-    <li onclick="openAbout()">About</li>
-    <li onclick="openFull()">Full Page</li>
-  </ul>
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+<div class="love-spinner"></div>
+<div class="loading-text">Loading Sportzfy TV...</div>
 </div>
 
-<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<!-- SIDE DRAWER -->
+<div class="drawer" id="drawer">
+<div class="drawer-header">
+<h3>Menu</h3>
+<div class="close" onclick="toggleDrawer()">✖</div>
+</div>
+<a href="#">Home</a>
+<a href="https://crex.live">Cric Score</a>
+<a href="https://www.sofascore.com">Foot Score</a>
+<a href="https://machingliker-wapjo-xyz.zcpanel.com/edit-9.html">About</a>
+</div>
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="left">
-    <div class="brand">Sportzfy Tv</div>
-  </div>
-  <div class="right">
-    <div class="search" onclick="toggleSearch()">🔍</div>
-    <div id="time"></div>
-  </div>
+<div class="left">
+<div class="toggle" onclick="toggleDrawer()">☰</div>
+<div class="brand">Sportzfy Tv</div>
+</div>
+<div class="right">
+<div class="search" onclick="toggleSearch()">🔍</div>
+<div id="time"></div>
+</div>
 </div>
 
 <div class="sub">
-  <div class="title">Live Channel</div>
+<div class="title">Live Channel</div>
 </div>
 
 <div class="searchbox" id="searchBox">
-  <input type="text" placeholder="Search channel..." onkeyup="filterChannels(this.value)">
+<input type="text" placeholder="Search channel..." onkeyup="filterChannels(this.value)">
 </div>
 
-<div class="item channel" onclick="go('https://tinyurl.com/sanyxtsports1')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813874301-25b66e67-53d0-4fe4-b4e9-879e73dab118.png"data-size="45x40">  <div class="name">T Sports</div>  <div class="lang">📌</div></div><div class="item channel" onclick="go('https://is.gd/sanyxtsports')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813874301-25b66e67-53d0-4fe4-b4e9-879e73dab118.png"data-size="40x35">  <div class="name">T Sports2 </div>  <div class="lang">HD</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxwillow3')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813888776-cc2f459b-8c1b-4eb5-911f-d5ca2753a4ad.webp"data-size="40x35">  <div class="name">Willow</div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxstarsports3')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/fdba6bfebbc1a9ac4723d4979feff73c/mahmudsany+wapkizs+com/Sany-boss-starsp-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">Star Sports1 </div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/StarSports/Select-1/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770818399114-f7c0b6d5-c4f6-4e4d-963b-4af52365d90c.png"data-size="40x35">  <div class="name">Star Sports Select1</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxasports2')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/31001906d2626c1de954ceebc34b4e33/mahmudsany+wapkizs+com/logo-Asports-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">A Sports</div>  <div class="lang">⚽</div></div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxptvsports1')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/582580105ab6c615bdc7cb9fac1e96c7/mahmudsany+wapkizs+com/Sany-boss-ptv-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">PTV Sports </div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://is.gd/sanyxnagoriktv2')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813904091-4749dfc3-217b-412d-9b58-923e9af73baa.webp"data-size="40x35">  <div class="name">Nagorik Tv</div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxafsports')">  <img class="logo" src="https://image2url.com/r2/default/images/1770818987558-dc038662-b6e7-4a2d-b3dd-6326c042246e.png"data-size="40x35">  <div class="name">AF Sports </div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://shorturl.at/ksSB7')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/68f1ca0e9187c461978600ae57b1227b/mahmudsany+wapkizs+com/Sany-boss-sky-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">Sky Sports</div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813914728-0fc45457-4dd6-485d-a5f4-cd17fc2cdaab.jpeg"data-size="40x35">  <div class="name">Bein Sports Extra</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/SONY/Sports1/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770816194383-197d0825-4a9b-4289-a106-7fa74b984326.jpeg"data-size="40x35">  <div class="name">Sony Sports1 </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://biostar-tv-world.vercel.app/?id=sony-ten-2')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/d89beec390ed8a95c1308e6bf057eebd/youtube99+wapo+mobi/download-2026-01-11T123513-975-png-(youtube99.wapo.mobi).png"data-size="40x35">  <div class="name">Sony Sports2</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/SONY/Sports3/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770816206763-d715ae15-7c11-43cb-83cb-40df6d2bd57b.jpeg"data-size="40x35">  <div class="name">Sony Sports 3 </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/SONY/Sports5/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770816220566-2711c35f-9eaf-4e5a-827e-2bb1cc4bc98b.jpeg"data-size="40x35">  <div class="name">Sony Sports 5</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxatm')">  <img class="logo" src="https://image2url.com/r2/default/images/1769917302053-58124c83-036f-4bb3-9d26-986124725e94.png"data-size="40x35">  <div class="name">ATM Football </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxtsports5')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/83a5f8c5b08e5eedc90428a924c34690/mahmudsany+wapkizs+com/Sany-boss-sport-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">Sports Tv1 </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://pepsi.abntv.live/hls/4spstream.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918703829-a52e8512-e2ae-4935-84bc-791ba4e41363.png"data-size="40x35">  <div class="name">Sports 2</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxsports3')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918703829-a52e8512-e2ae-4935-84bc-791ba4e41363.png"data-size="40x35">  <div class="name">Sports 3</div><div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxsports4')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918721234-08e05071-1fcf-4d94-b624-8f4e8918f9cb.png"data-size="40x35">  <div class="name">Sports 4</div><div class="lang">⚽</div></div><div class="item channel" onclick="go('https://proshls.wns.live/hls/stream.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918042487-4944853a-35db-4f7d-b601-b0d519931779.jpeg"data-size="40x35">  <div class="name">Pro Sports</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813925571-1d0a3a17-2019-4c7e-9f85-75d7267e7e36.webp"data-size="40x35">  <div class="name">Fifa Tv</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://cdn4.skygo.mn/live/disk1/SPSPlay/HLSv3-FTA/SPSPlay.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770819703274-cfe9fc8e-e7cd-4ff5-a671-9ac9dd1be26c.png"data-size="40x35">  <div class="name">Psn Sports </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://cdn4.skygo.mn/live/disk1/SPSPlus/HLSv3-FTA/SPSPlus.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770819688064-43e7cc9c-9e81-49e1-aabb-0e59401577e6.jpeg"data-size="40x35">  <div class="name">Psn Sports3</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxlaliga')">  <img class="logo" src="https://image2url.com/r2/default/images/1769917825664-7029e70e-12e8-4e77-9a1e-5e8fffef8682.jpeg"data-size="40x35">  <div class="name">Laliga Tv</div><div class="lang">⚽</div></div><div class="item channel" onclick="go('https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/bitrate_3.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1769874775570-c4ded786-4cc8-400d-b7db-b56df6815fab.jpeg"data-size="40x35">  <div class="name">Real Madrid Tv</div> </div><div class="item channel" onclick="go('https://is.gd/sanyxlamer1')">  <img class="logo" src="https://image2url.com/r2/default/images/1769518043218-f7ca15c5-10ae-4a5d-bc35-309e338671c6.png" data-size="40x35">  <div class="name">BeIN Sports 1</div></div><div class="item channel" onclick="go('https://tinyurl.com/beinxsany2')">  <img class="logo" src="https://image2url.com/r2/default/images/1769518061040-7ae16705-8bd5-4a11-8305-b82535e3dc5c.jpeg" data-size="40x35">  <div class="name">BeIN Sports 2</div></div><div class="item channel" onclick="go('https://tinyurl.com/beinxsany3')">  <img class="logo" src="https://image2url.com/r2/default/images/1769518072904-3b0d895c-b673-4438-a644-73a50beb048f.png" data-size="40x35">  <div class="name">BeIN Sports 3</div></div>
-
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <div class="menu-icon" onclick="openMenu()">☰</div>
-  <div class="back-icon" onclick="closeAll()">❮</div>
-</div>
-
-<!-- CONFIRM CLEAR -->
-<div class="modal" id="step2">
-  <div>Are you sure to clear data?</div>
-  <div class="modal-buttons">
-    <span onclick="confirmClear()">Yes</span>
-    <span onclick="closeAll()">No</span>
-  </div>
-</div>
-
-<!-- ERASED -->
-<div class="modal" id="step1">
-  <div>Your data has been erased.</div>
-  <div class="modal-buttons">
-    <span onclick="closeAll()">OK</span>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<div class="modal" id="aboutPage">
-  <div style="font-size:26px;font-weight:bold;margin-bottom:10px;">Sportzfy Tv</div>
-  <div style="font-size:16px;opacity:.8;">
-    © 2023–2026 Sany<br>All rights reserved.
-  </div>
-  <div class="modal-buttons">
-    <span onclick="closeAbout()">❮</span>
-  </div>
-</div>
+<!-- CHANNELS SAME AS BEFORE -->
+<div class="item channel" onclick="go('https://tinyurl.com/sanyxtsports1')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813874301-25b66e67-53d0-4fe4-b4e9-879e73dab118.png"data-size="40x35">  <div class="name">T Sports</div>  <div class="lang">📌</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxtsports5')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813874301-25b66e67-53d0-4fe4-b4e9-879e73dab118.png"data-size="40x35">  <div class="name">T Sports2 </div>  <div class="lang">HD</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxwillow3')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813888776-cc2f459b-8c1b-4eb5-911f-d5ca2753a4ad.webp"data-size="40x35">  <div class="name">Willow</div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxstarsports3')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/fdba6bfebbc1a9ac4723d4979feff73c/mahmudsany+wapkizs+com/Sany-boss-starsp-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">Star Sports1 </div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/StarSports/Select-1/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770818399114-f7c0b6d5-c4f6-4e4d-963b-4af52365d90c.png"data-size="40x35">  <div class="name">Star Sports Select1</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxasports2')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/31001906d2626c1de954ceebc34b4e33/mahmudsany+wapkizs+com/logo-Asports-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">A Sports</div>  <div class="lang">⚽</div></div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxptvsports1')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/582580105ab6c615bdc7cb9fac1e96c7/mahmudsany+wapkizs+com/Sany-boss-ptv-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">PTV Sports </div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxnagorik2')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813904091-4749dfc3-217b-412d-9b58-923e9af73baa.webp"data-size="40x35">  <div class="name">Nagorik Tv</div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxafsports')">  <img class="logo" src="https://image2url.com/r2/default/images/1770818987558-dc038662-b6e7-4a2d-b3dd-6326c042246e.png"data-size="40x35">  <div class="name">AF Sports </div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://tinyurl.com/sanyxskysportsc')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/68f1ca0e9187c461978600ae57b1227b/mahmudsany+wapkizs+com/Sany-boss-sky-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">Sky Sports</div>  <div class="lang">🏏</div></div><div class="item channel" onclick="go('https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813914728-0fc45457-4dd6-485d-a5f4-cd17fc2cdaab.jpeg"data-size="40x35">  <div class="name">Bein Sports Extra</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/SONY/Sports1/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770816194383-197d0825-4a9b-4289-a106-7fa74b984326.jpeg"data-size="40x35">  <div class="name">Sony Sports1 </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://biostar-tv-world.vercel.app/?id=sony-ten-2')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/d89beec390ed8a95c1308e6bf057eebd/youtube99+wapo+mobi/download-2026-01-11T123513-975-png-(youtube99.wapo.mobi).png"data-size="40x35">  <div class="name">Sony Sports2</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/SONY/Sports3/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770816206763-d715ae15-7c11-43cb-83cb-40df6d2bd57b.jpeg"data-size="40x35">  <div class="name">Sony Sports 3 </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://tigerhub-bd.vercel.app/SONY/Sports5/tracks-v1a1/mono.ts.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770816220566-2711c35f-9eaf-4e5a-827e-2bb1cc4bc98b.jpeg"data-size="40x35">  <div class="name">Sony Sports 5</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxatm')">  <img class="logo" src="https://image2url.com/r2/default/images/1769917302053-58124c83-036f-4bb3-9d26-986124725e94.png"data-size="40x35">  <div class="name">ATM Football </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxtsports5')">  <img class="logo" src="https://pix1.b442d6eefbd6173bad7ee5bde6cd31e8.com/download/83a5f8c5b08e5eedc90428a924c34690/mahmudsany+wapkizs+com/Sany-boss-sport-png-(mahmudsany.wapkizs.com).png"data-size="40x35">  <div class="name">Sports Tv1 </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://pepsi.abntv.live/hls/4spstream.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918703829-a52e8512-e2ae-4935-84bc-791ba4e41363.png"data-size="40x35">  <div class="name">Sports 2</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxsports3')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918703829-a52e8512-e2ae-4935-84bc-791ba4e41363.png"data-size="40x35">  <div class="name">Sports 3</div><div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxsports4')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918721234-08e05071-1fcf-4d94-b624-8f4e8918f9cb.png"data-size="40x35">  <div class="name">Sports 4</div><div class="lang">⚽</div></div><div class="item channel" onclick="go('https://proshls.wns.live/hls/stream.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1769918042487-4944853a-35db-4f7d-b601-b0d519931779.jpeg"data-size="40x35">  <div class="name">Pro Sports</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://37b4c228.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/playlist.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770813925571-1d0a3a17-2019-4c7e-9f85-75d7267e7e36.webp"data-size="40x35">  <div class="name">Fifa Tv</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://cdn4.skygo.mn/live/disk1/SPSPlay/HLSv3-FTA/SPSPlay.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770819703274-cfe9fc8e-e7cd-4ff5-a671-9ac9dd1be26c.png"data-size="40x35">  <div class="name">Psn Sports </div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://cdn4.skygo.mn/live/disk1/SPSPlus/HLSv3-FTA/SPSPlus.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1770819688064-43e7cc9c-9e81-49e1-aabb-0e59401577e6.jpeg"data-size="40x35">  <div class="name">Psn Sports3</div>  <div class="lang">⚽</div></div><div class="item channel" onclick="go('https://is.gd/sanyxlaliga')">  <img class="logo" src="https://image2url.com/r2/default/images/1769917825664-7029e70e-12e8-4e77-9a1e-5e8fffef8682.jpeg"data-size="40x35">  <div class="name">Laliga Tv</div><div class="lang">⚽</div></div><div class="item channel" onclick="go('https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/bitrate_3.m3u8')">  <img class="logo" src="https://image2url.com/r2/default/images/1769874775570-c4ded786-4cc8-400d-b7db-b56df6815fab.jpeg"data-size="40x35">  <div class="name">Real Madrid Tv</div> </div><div class="item channel" onclick="go('https://is.gd/sanyxlamer1')">  <img class="logo" src="https://image2url.com/r2/default/images/1769518043218-f7ca15c5-10ae-4a5d-bc35-309e338671c6.png" data-size="40x35">  <div class="name">BeIN Sports 1</div></div><div class="item channel" onclick="go('https://tinyurl.com/beinxsany2')">  <img class="logo" src="https://image2url.com/r2/default/images/1769518061040-7ae16705-8bd5-4a11-8305-b82535e3dc5c.jpeg" data-size="40x35">  <div class="name">BeIN Sports 2</div></div><div class="item channel" onclick="go('https://tinyurl.com/beinxsany3')">  <img class="logo" src="https://image2url.com/r2/default/images/1769518072904-3b0d895c-b673-4438-a644-73a50beb048f.png" data-size="40x35">  <div class="name">BeIN Sports 3</div></div></div>
 
 <script>
+// Hide preloader after page load
+window.addEventListener("load",function(){
+setTimeout(function(){
+document.getElementById("preloader").style.display="none";
+},2300);
+});
 
-/* TIME */
+// Clock
 function updateTime(){
-  const d=new Date();
-  let h=d.getHours(),m=d.getMinutes();
-  let ap=h>=12?'PM':'AM';
-  h=h%12||12;
-  m=m<10?'0'+m:m;
-  document.getElementById("time").innerText=" "+h+":"+m+" "+ap;
+const d=new Date();
+let h=d.getHours(),m=d.getMinutes();
+let ap=h>=12?'PM':'AM';
+h=h%12||12;
+m=m<10?'0'+m:m;
+document.getElementById("time").innerText=" "+h+":"+m+" "+ap;
 }
 setInterval(updateTime,1000);
 updateTime();
 
-/* SEARCH */
+// Drawer
+function toggleDrawer(){
+document.getElementById("drawer").classList.toggle("active");
+}
+
+// Search
 function toggleSearch(){
-  const s=document.getElementById("searchBox");
-  s.style.display=s.style.display==="block"?"none":"block";
+const s=document.getElementById("searchBox");
+s.style.display=s.style.display==="block"?"none":"block";
 }
+
+// Filter
 function filterChannels(val){
-  val=val.toLowerCase();
-  document.querySelectorAll(".channel").forEach(c=>{
-    c.style.display=c.innerText.toLowerCase().includes(val)?"flex":"none";
-  });
+val=val.toLowerCase();
+document.querySelectorAll(".channel").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(val)?"flex":"none";
+});
 }
 
-/* SIDEBAR */
-function openMenu(){
-  document.getElementById("sidebar").style.left="0";
-  document.getElementById("overlay").style.display="block";
-}
-function closeMenu(){
-  document.getElementById("sidebar").style.left="-250px";
-  document.getElementById("overlay").style.display="none";
-}
-
-/* CLEAR DATA */
-function startClear(){
-  closeMenu();
-  document.getElementById("step2").style.display="flex";
-}
-function confirmClear(){
-  localStorage.clear();
-  document.getElementById("step2").style.display="none";
-  document.getElementById("step1").style.display="flex";
-}
-function closeAll(){
-  document.getElementById("step1").style.display="none";
-  document.getElementById("step2").style.display="none";
-}
-
-/* ABOUT */
-function openAbout(){
-  closeMenu();
-  document.getElementById("aboutPage").style.display="flex";
-}
-function closeAbout(){
-  document.getElementById("aboutPage").style.display="none";
-}
-
-/* FULL PAGE */
-function openFull(){
-  closeMenu();
-  document.documentElement.requestFullscreen();
-}
-
-/* REDIRECT */
+// Redirect
 function go(url){
-  window.location.href=url;
+window.location.href=url;
 }
 </script>
 
